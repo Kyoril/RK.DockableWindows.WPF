@@ -7,6 +7,10 @@ using System.Windows;
 
 namespace Docker
 {
+    /// <summary>
+    /// This class represents a SplitContainer which is used to split dockable controls
+    /// in a DockCanvas element.
+    /// </summary>
     public class SplitContainer : FrameworkElement
     {
     }
