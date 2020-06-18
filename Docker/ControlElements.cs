@@ -10,6 +10,8 @@ namespace Docker
         /// Background brush of the DockCanvas control.
         /// </summary>
         DockCanvasBackgroundBrush,
+        DockControlBorderBrush,
+
 
         /// <summary>
         /// Style for the active title bar of a WindowGroup.

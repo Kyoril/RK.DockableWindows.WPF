@@ -5,9 +5,13 @@
 
     
     <!-- Default background brush for DockCanvas element -->
-    <SolidColorBrush x:Key="{ComponentResourceKey ResourceId={x:Static local:ControlElements.DockCanvasBackgroundBrush}, TypeInTargetAssembly={x:Type local:ControlElements}}" Color="#EEEEF2" />
+    <SolidColorBrush x:Key="{ComponentResourceKey ResourceId={x:Static local:ControlElements.DockCanvasBackgroundBrush}, TypeInTargetAssembly={x:Type local:ControlElements}}" 
+                     Color="#EEEEF2" />
 
-    
+    <SolidColorBrush x:Key="{ComponentResourceKey ResourceId={x:Static local:ControlElements.DockControlBorderBrush}, TypeInTargetAssembly={x:Type local:ControlElements}}" 
+                     Color="#CCCEDB" />
+
+
     <!-- Default style of the DockCanvas control -->
     <Style x:Key="{x:Type local:DockCanvas}" TargetType="{x:Type local:DockCanvas}">
         <Setter Property="Background" Value="{DynamicResource {ComponentResourceKey ResourceId={x:Static local:ControlElements.DockCanvasBackgroundBrush},TypeInTargetAssembly={x:Type local:ControlElements}}}" />
@@ -67,6 +71,25 @@
     </ControlTemplate>
 
 
+
+    <!-- TitleBarBackground -->
+    <Style x:Key="TitleBarBackground">
+        <Setter Property="Control.BorderBrush" Value="{DynamicResource {ComponentResourceKey ResourceId={x:Static local:ControlElements.DockControlBorderBrush},TypeInTargetAssembly={x:Type local:ControlElements}}}" />
+        <Setter Property="Control.BorderThickness" Value="1,1,1,0" />
+    </Style>
+
+
+    <!-- InactiveDockedTitleBar -->
+    <Style x:Key="{ComponentResourceKey ResourceId={x:Static local:ControlElements.InactiveDockedTitleBar}, TypeInTargetAssembly={x:Type local:DockCanvas}}" BasedOn="{StaticResource TitleBarBackground}">
+    </Style>
+
+    <!-- ActiveDockedTitleBar -->
+    <Style x:Key="{ComponentResourceKey ResourceId={x:Static local:ControlElements.ActiveDockedTitleBar}, TypeInTargetAssembly={x:Type local:DockCanvas}}" BasedOn="{StaticResource TitleBarBackground}">
+        <Setter Property="Control.Background" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
+        <Setter Property="TextElement.Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" />
+    </Style>
+
+    
     <!-- WindowGroupTemplate -->
     <ControlTemplate x:Key="{ComponentResourceKey ResourceId={x:Static local:DynamicTemplates.WindowGroupTemplate}, TypeInTargetAssembly={x:Type local:DynamicTemplates}}" TargetType="{x:Type local:WindowGroup}">
         <!-- Window consists of a grid with three rows: TitleBar, Content, WindowList (tabs)-->
@@ -95,7 +118,7 @@
                         <TextBlock FontFamily="Marlett" FontSize="12" Text="r" />
                     </Button>
                     <Button Name="PART_PinButton" 
-                            Visibility="Collapsed" 
+                            Visibility="Visible" 
                             Focusable="False" 
                             Width="16" 
                             Height="15" 
@@ -121,7 +144,26 @@
                     <TextBlock Name="TitleBarLabel" 
                                Padding="0,1,0,2" 
                                TextTrimming="CharacterEllipsis" 
-                               Text="TitleBarLabelText" />
+                               Text="TitleBarLabelText"
+                               DockPanel.Dock="Left"/>
+                    <Border Background="Transparent" Margin="8,0,8,0">
+                        <Rectangle Margin="0,7,0,5">
+                            <Rectangle.Fill>
+                                <DrawingBrush Viewbox="0,0,4,8" ViewboxUnits="Absolute" Viewport="0,0,4,8" ViewportUnits="Absolute" TileMode="Tile">
+                                    <DrawingBrush.Drawing>
+                                        <DrawingGroup>
+                                            <GeometryDrawing Brush="#9A9A9A"
+                                                             Geometry="M 0 0 L 1 0 L 1 1 L 0 1 z" />
+                                            <GeometryDrawing Brush="#9A9A9A"
+                                                             Geometry="M 0 4 L 1 4 L 1 5 L 0 5 z" />
+                                            <GeometryDrawing Brush="#9A9A9A"
+                                                             Geometry="M 2 2 L 3 2 L 3 3 L 2 3 z" />
+                                        </DrawingGroup>
+                                    </DrawingBrush.Drawing>
+                                </DrawingBrush>
+                            </Rectangle.Fill>
+                        </Rectangle>
+                    </Border>
                 </DockPanel>
             </Border>
             
