@@ -34,6 +34,8 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -49,9 +51,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ControlElements.cs" />
+    <Compile Include="DynamicTemplates.cs" />
     <Compile Include="SplitContainer.cs" />
     <Compile Include="SplitContainerCollection.cs" />
     <Compile Include="SplitContainerContentCollection.cs" />
+    <Compile Include="WindowGroup.cs" />
     <Page Include="Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

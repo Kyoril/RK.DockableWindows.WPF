@@ -81,9 +81,9 @@ namespace Docker
             {
                 throw new ArgumentNullException(nameof(element));
             }
-            if (!(element is SplitContainer))
+            if (!(element is SplitContainer) && !(element is WindowGroup))
             {
-                throw new ArgumentException("Only SplitContainer elements are allowed to be children of a SplitContainer element!", nameof(element));
+                throw new ArgumentException("Only SplitContainer and WindowGroup elements are allowed to be children of a SplitContainer element!", nameof(element));
             }
         }
         #endregion

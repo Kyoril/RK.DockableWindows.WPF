@@ -12,5 +12,136 @@
     <Style x:Key="{x:Type local:DockCanvas}" TargetType="{x:Type local:DockCanvas}">
         <Setter Property="Background" Value="{DynamicResource {ComponentResourceKey ResourceId={x:Static local:ControlElements.DockCanvasBackgroundBrush},TypeInTargetAssembly={x:Type local:ControlElements}}}" />
     </Style>
-    
+
+    <!-- Default style for the WindowGroup control -->
+    <Style TargetType="{x:Type local:WindowGroup}">
+        <Setter Property="Template" Value="{DynamicResource {ComponentResourceKey ResourceId={x:Static local:DynamicTemplates.WindowGroupTemplate}, TypeInTargetAssembly={x:Type local:DynamicTemplates}}}" />
+    </Style>
+
+
+    <!-- TitleBarButtonTemplate -->
+    <ControlTemplate x:Key="TitleBarButtonTemplate" 
+                     TargetType="{x:Type ButtonBase}">
+        <Border Name="ButtonBorder" 
+                Style="{DynamicResource {ComponentResourceKey ResourceId={x:Static local:ControlElements.TitleBarButton}, TypeInTargetAssembly={x:Type local:DockCanvas}}}">
+            <ContentPresenter Margin="{TemplateBinding Padding}" />
+        </Border>
+        
+        <ControlTemplate.Triggers>
+            <MultiDataTrigger>
+                <MultiDataTrigger.Conditions>
+                    <Condition Value="False" 
+                               Binding="{Binding Path=IsKeyboardFocusWithin, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:WindowGroup}}}" />
+                    <Condition Value="True" 
+                               Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource Self}}" />
+                </MultiDataTrigger.Conditions>
+                <Setter TargetName="ButtonBorder" 
+                        Property="FrameworkElement.Style" 
+                        Value="{DynamicResource {ComponentResourceKey ResourceId={x:Static local:ControlElements.InactiveTitleBarButtonHot}, TypeInTargetAssembly={x:Type local:DockCanvas}}}" />
+            </MultiDataTrigger>
+            
+            <MultiDataTrigger>
+                <MultiDataTrigger.Conditions>
+                    <Condition Value="True" 
+                               Binding="{Binding Path=IsKeyboardFocusWithin, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:WindowGroup}}}" />
+                    <Condition Value="True" 
+                               Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource Self}}" />
+                </MultiDataTrigger.Conditions>
+                <Setter TargetName="ButtonBorder" 
+                        Property="FrameworkElement.Style" 
+                        Value="{DynamicResource {ComponentResourceKey ResourceId={x:Static local:ControlElements.ActiveTitleBarButtonHot}, TypeInTargetAssembly={x:Type local:DockCanvas}}}" />
+            </MultiDataTrigger>
+            
+            <MultiDataTrigger>
+                <MultiDataTrigger.Conditions>
+                    <Condition Value="True" 
+                               Binding="{Binding Path=IsKeyboardFocusWithin, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:WindowGroup}}}" />
+                    <Condition Value="True" 
+                               Binding="{Binding Path=IsPressed, RelativeSource={RelativeSource Self}}" />
+                </MultiDataTrigger.Conditions>
+                <Setter TargetName="ButtonBorder" 
+                        Property="FrameworkElement.Style"
+                        Value="{DynamicResource {ComponentResourceKey ResourceId={x:Static local:ControlElements.ActiveTitleBarButtonPressed}, TypeInTargetAssembly={x:Type local:DockCanvas}}}" />
+            </MultiDataTrigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+
+    <!-- WindowGroupTemplate -->
+    <ControlTemplate x:Key="{ComponentResourceKey ResourceId={x:Static local:DynamicTemplates.WindowGroupTemplate}, TypeInTargetAssembly={x:Type local:DynamicTemplates}}" TargetType="{x:Type local:WindowGroup}">
+        <!-- Window consists of a grid with three rows: TitleBar, Content, WindowList (tabs)-->
+        <Grid SnapsToDevicePixels="True">
+            <!-- Row definitions -->
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            
+            <!-- The title bar part -->
+            <Border Name="PART_TitleBar" 
+                    Grid.Row="0" 
+                    Padding="3,0,2,0" 
+                    Style="{DynamicResource {ComponentResourceKey ResourceId={x:Static local:ControlElements.InactiveDockedTitleBar}, TypeInTargetAssembly={x:Type local:DockCanvas}}}">
+                <DockPanel>
+                    <Button Name="PART_CloseButton" 
+                            Focusable="False" 
+                            Width="16" 
+                            Height="15" 
+                            DockPanel.Dock="Right" 
+                            Padding="1" 
+                            Template="{StaticResource TitleBarButtonTemplate}" 
+                            Foreground="{Binding ElementName=PART_TitleBar, Path=(TextElement.Foreground)}">
+                        <TextBlock FontFamily="Marlett" FontSize="12" Text="r" />
+                    </Button>
+                    <Button Name="PART_PinButton" 
+                            Visibility="Collapsed" 
+                            Focusable="False" 
+                            Width="16" 
+                            Height="15" 
+                            DockPanel.Dock="Right" 
+                            Padding="1" 
+                            Template="{StaticResource TitleBarButtonTemplate}">
+                        <Path Name="PinButtonPath" 
+                              Data="M0.5,6.5 L6.5,6.5 M1.5,6.5 L1.5,0.5 L4.5,0.5 L4.5,6.5 L5.5,6.5 L5.5,0 M3.5,6.5 L3.5,9.5" 
+                              Margin="2,1,2,0" 
+                              Stroke="{Binding ElementName=PART_TitleBar, Path=(TextElement.Foreground)}" />
+                    </Button>
+                    <Button Name="PART_OptionsButton" 
+                            ClickMode="Press" 
+                            Focusable="False" 
+                            Width="16" 
+                            Height="15" 
+                            DockPanel.Dock="Right" 
+                            Padding="1" 
+                            Template="{StaticResource TitleBarButtonTemplate}" 
+                            Foreground="{Binding ElementName=PART_TitleBar, Path=(TextElement.Foreground)}">
+                        <TextBlock FontFamily="Marlett" FontSize="12" Text="u" />
+                    </Button>
+                    <TextBlock Name="TitleBarLabel" 
+                               Padding="0,1,0,2" 
+                               TextTrimming="CharacterEllipsis" 
+                               Text="TitleBarLabelText" />
+                </DockPanel>
+            </Border>
+            
+            <!-- Content part -->
+            <Border Grid.Row="1">
+                <ContentPresenter Margin="{TemplateBinding Padding}" />
+            </Border>
+            
+            <!-- WindowList part (tabs) -->
+            <!-- TODO -->
+        </Grid>
+        
+        <!-- Triggers -->
+        <ControlTemplate.Triggers>
+            <!-- Change the title bar style to use ActiveDockedTitleBar when the control is focused -->
+            <Trigger Property="UIElement.IsKeyboardFocusWithin" Value="True">
+                <Setter TargetName="PART_TitleBar" 
+                        Property="FrameworkElement.Style" 
+                        Value="{DynamicResource {ComponentResourceKey ResourceId={x:Static local:ControlElements.ActiveDockedTitleBar}, TypeInTargetAssembly={x:Type local:DockCanvas}}}" />
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
 </ResourceDictionary>

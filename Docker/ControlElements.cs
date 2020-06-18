@@ -9,6 +9,17 @@ namespace Docker
         /// <summary>
         /// Background brush of the DockCanvas control.
         /// </summary>
-        DockCanvasBackgroundBrush
+        DockCanvasBackgroundBrush,
+
+        ActiveDockedTitleBar,
+        InactiveDockedTitleBar,
+        TitleBarButton,
+        ActiveTitleBarButtonHot,
+        InactiveTitleBarButtonHot,
+        ActiveTitleBarButtonPressed,
+
+
+        WindowGroupTabStripContainer,
+        WindowGroupTabStrip,
     }
 }

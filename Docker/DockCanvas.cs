@@ -15,6 +15,7 @@ namespace Docker
     public class DockCanvas : Control
     {
         private Rectangle background;
+        private DockPanel layoutPanel;
 
 
         #region DependencyProperties
@@ -39,12 +40,15 @@ namespace Docker
             // Watch for changes of the control's Background property.
             BackgroundProperty.OverrideMetadata(typeof(DockCanvas), new FrameworkPropertyMetadata(BackgroundProperty.DefaultMetadata.DefaultValue, new PropertyChangedCallback(OnBackgroundChanged)));
         }
-
         public DockCanvas()
         {
             // Create the background visual and add it
             this.background = new Rectangle();
             this.AddVisualChild(this.background);
+
+            // Create the layout panel which will host our actual content
+            this.layoutPanel = new DockPanel();
+            this.AddVisualChild(this.layoutPanel);
 
             // Setup split container collection
             this.SplitContainers = new SplitContainerCollection(this, this);
@@ -66,14 +70,18 @@ namespace Docker
             // Arrange visual children
             this.background.Arrange(final);
 
+            // Arrange the layout panel, but apply the Padding settings before
+            final.Offset(this.Padding.Left, this.Padding.Top);
+            final.Width = Math.Max(final.Width - (this.Padding.Left + this.Padding.Right), 0.0);
+            final.Height = Math.Max(final.Height - (this.Padding.Top + this.Padding.Bottom), 0.0);
+            layoutPanel.Arrange(final);
+
             return arrangeBounds;
         }
-
         /// <summary>
         /// We have a fixed amount of visual children.
         /// </summary>
-        protected override int VisualChildrenCount => 1;
-
+        protected override int VisualChildrenCount => 2;
         /// <summary>
         /// Assigns an index to each available visual child.
         /// </summary>
@@ -85,6 +93,8 @@ namespace Docker
             {
                 case 0:
                     return this.background;
+                case 1:
+                    return this.layoutPanel;
             }
 
             throw new ArgumentOutOfRangeException(nameof(index));
@@ -118,7 +128,6 @@ namespace Docker
                 }
             }
         }
-
         /// <summary>
         /// A collection of all split containers of this canvas.
         /// </summary>

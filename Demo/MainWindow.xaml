@@ -15,7 +15,9 @@
             <docker:DockCanvas.SplitContainers>
                 <!-- Main split container -->
                 <docker:SplitContainer>
-                    
+                    <docker:WindowGroup>
+                        
+                    </docker:WindowGroup>
                 </docker:SplitContainer>
             </docker:DockCanvas.SplitContainers>
             
