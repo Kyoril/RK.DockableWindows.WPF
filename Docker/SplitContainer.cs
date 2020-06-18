@@ -26,6 +26,19 @@ namespace Docker
         }
         #endregion
 
+
+        #region FrameworkElement overrides
+        protected override Size ArrangeOverride(Size finalSize)
+        {
+            return base.ArrangeOverride(finalSize);
+        }
+        protected override Size MeasureOverride(Size availableSize)
+        {
+            return base.MeasureOverride(availableSize);
+        }
+        #endregion
+
+
         #region Internals
         internal void AddLogicalChildInternal(FrameworkElement element)
         {

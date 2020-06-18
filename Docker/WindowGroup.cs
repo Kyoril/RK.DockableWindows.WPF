@@ -15,11 +15,31 @@ using System.Windows.Shapes;
 
 namespace Docker
 {
+    /// <summary>
+    /// This control wraps around dockable windows. It contains a title bar, a content area and
+    /// a tab strip below (although the layout is dynamically defined using a style and can be
+    /// completely changed).
+    /// </summary>
     public class WindowGroup : Control
     {
+        #region Routed Commands
+        /// <summary>
+        /// A command to toggle the pinned state of a WindowGroup. A window group can be unpinned to minimize it.
+        /// </summary>
+        public static readonly RoutedCommand TogglePinCommand = new RoutedCommand("TogglePin", typeof(WindowGroup));
+        #endregion
+
+
+        #region Construction
         static WindowGroup()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(WindowGroup), new FrameworkPropertyMetadata(typeof(WindowGroup)));
+
+            // Prevent the WindowGroup control from being focused
+            FocusableProperty.OverrideMetadata(typeof(WindowGroup), new FrameworkPropertyMetadata(false));
         }
+        #endregion
+
+
     }
 }

@@ -2,7 +2,9 @@
 namespace Docker
 {
     /// <summary>
-    /// Contains dynamic control template types.
+    /// Contains dynamic control template types. These can be used to change the whole
+    /// appearance of controls, for example if you want to hide or reposition tabs of
+    /// the WindowGroup control.
     /// </summary>
     public enum DynamicTemplates
     {

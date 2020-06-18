@@ -6,23 +6,34 @@
         xmlns:local="clr-namespace:Demo"
         xmlns:docker="clr-namespace:Docker;assembly=Docker"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="800"
+        ResizeMode="CanResizeWithGrip">
     <DockPanel>
+        <!-- Main Menu of the application -->
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="File">
+                <MenuItem Header="Exit" />
+            </MenuItem>
+        </Menu>
+
+        <!-- Status bar -->
+        <StatusBar DockPanel.Dock="Bottom">
+            <StatusBarItem>
+                <TextBlock>Ready...</TextBlock>
+            </StatusBarItem>
+        </StatusBar>
+        
         <!-- The dock canvas element -->
         <docker:DockCanvas>
-            
             <!-- Setup split container elements -->
             <docker:DockCanvas.SplitContainers>
                 <!-- Main split container -->
                 <docker:SplitContainer>
                     <docker:WindowGroup>
-                        
+
                     </docker:WindowGroup>
                 </docker:SplitContainer>
             </docker:DockCanvas.SplitContainers>
-            
-            <!-- Currently, the canvas should support content -->
-            <TextBox></TextBox>
         </docker:DockCanvas>
     </DockPanel>
 </Window>

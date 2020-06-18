@@ -51,6 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ControlElements.cs" />
+    <Compile Include="DockHierarchyPresenter.cs" />
     <Compile Include="DynamicTemplates.cs" />
     <Compile Include="SplitContainer.cs" />
     <Compile Include="SplitContainerCollection.cs" />

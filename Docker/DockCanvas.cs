@@ -16,6 +16,7 @@ namespace Docker
     {
         private Rectangle background;
         private DockPanel layoutPanel;
+        private DockHierarchyPresenter hierarchyPresenter;
 
 
         #region DependencyProperties
@@ -42,6 +43,13 @@ namespace Docker
         }
         public DockCanvas()
         {
+            // Create the dock hierarchy presenter first
+            this.hierarchyPresenter = new DockHierarchyPresenter(this);
+
+            // Setup split container collection. The visual parent will be the hierarchy presenter
+            // so that the split containers will be displayed inside.
+            this.SplitContainers = new SplitContainerCollection(this, this.hierarchyPresenter);
+
             // Create the background visual and add it
             this.background = new Rectangle();
             this.AddVisualChild(this.background);
@@ -50,8 +58,8 @@ namespace Docker
             this.layoutPanel = new DockPanel();
             this.AddVisualChild(this.layoutPanel);
 
-            // Setup split container collection
-            this.SplitContainers = new SplitContainerCollection(this, this);
+            // Create the dock hierachy presenter and add it to the layout panel.
+            this.layoutPanel.Children.Add(this.hierarchyPresenter);
         }
         #endregion
 
@@ -77,6 +85,22 @@ namespace Docker
             layoutPanel.Arrange(final);
 
             return arrangeBounds;
+        }
+
+        protected override Size MeasureOverride(Size constraint)
+        {
+            // Measure background against constraints
+            this.background.Measure(constraint);
+
+            // Apply padding to constraint and measure layout panel
+            constraint.Width -= this.Padding.Left + this.Padding.Right;
+            constraint.Height -= this.Padding.Top + this.Padding.Bottom;
+            this.layoutPanel.Measure(constraint);
+
+            // Return layout panel's desired size with padding applied
+            return new Size(
+                this.layoutPanel.DesiredSize.Width + this.Padding.Left + this.Padding.Right,
+                this.layoutPanel.DesiredSize.Height + this.Padding.Top + this.Padding.Bottom);
         }
         /// <summary>
         /// We have a fixed amount of visual children.
