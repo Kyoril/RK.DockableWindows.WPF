@@ -20,8 +20,9 @@ namespace Docker
     /// a tab strip below (although the layout is dynamically defined using a style and can be
     /// completely changed).
     /// </summary>
+    [TemplatePart(Name = "PART_TitleBar", Type = typeof(FrameworkElement))]
     public class WindowGroup : Control
-    {
+    {  
         #region Routed Commands
         /// <summary>
         /// A command to toggle the pinned state of a WindowGroup. A window group can be unpinned to minimize it.

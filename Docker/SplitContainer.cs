@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Markup;
@@ -25,16 +26,29 @@ namespace Docker
             this.Children = new SplitContainerContentCollection(this);
         }
         #endregion
-
+        
 
         #region FrameworkElement overrides
         protected override Size ArrangeOverride(Size finalSize)
         {
-            return base.ArrangeOverride(finalSize);
+            foreach (UIElement element in this.Children)
+            {
+                element.Arrange(new Rect(0.0, 0.0, finalSize.Width, finalSize.Height));
+            }
+
+            return finalSize;
         }
         protected override Size MeasureOverride(Size availableSize)
         {
-            return base.MeasureOverride(availableSize);
+            //TODO
+            
+            return availableSize;
+        }
+        protected override IEnumerator LogicalChildren => this.Children.GetEnumerator();
+        protected override int VisualChildrenCount => this.Children.Count;
+        protected override Visual GetVisualChild(int index)
+        {
+            return this.Children[index];
         }
         #endregion
 
