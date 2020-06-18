@@ -1,5 +1,4 @@
-﻿using System;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 using Docker;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -20,7 +19,7 @@ namespace UnitTest
             // Add a dock panel as content element to the canvas
             var panel = new DockPanel();
             canvas.Child = panel;
-
+            
             return canvas;
         }
 

@@ -10,6 +10,15 @@
     <DockPanel>
         <!-- The dock canvas element -->
         <docker:DockCanvas>
+            
+            <!-- Setup split container elements -->
+            <docker:DockCanvas.SplitContainers>
+                <!-- Main split container -->
+                <docker:SplitContainer>
+                    
+                </docker:SplitContainer>
+            </docker:DockCanvas.SplitContainers>
+            
             <!-- Currently, the canvas should support content -->
             <TextBox></TextBox>
         </docker:DockCanvas>

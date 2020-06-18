@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace Docker
 {
     /// <summary>
@@ -11,6 +6,9 @@ namespace Docker
     /// </summary>
     public enum ControlElements
     {
+        /// <summary>
+        /// Background brush of the DockCanvas control.
+        /// </summary>
         DockCanvasBackgroundBrush
     }
 }

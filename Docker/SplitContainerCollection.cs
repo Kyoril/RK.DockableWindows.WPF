@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Media;
 
 namespace Docker
 {
+    /// <summary>
+    /// A class which collects multiple SplitContainer elements. This class is currently used in
+    /// the DockCanvas class to contain all SplitContainers and allow them to be set up properly 
+    /// using Xaml.
+    /// </summary>
     public class SplitContainerCollection : ICollection, IList
     {
-        private DockCanvas parent;
+        private readonly DockCanvas parent;
         private VisualCollection collection;
 
 
@@ -29,27 +30,22 @@ namespace Docker
             int result = this.collection.Add(container);
             return result;
         }
-
         public void Remove(SplitContainer container)
         {
             this.collection.Remove(container);
         }
-
         public bool Contains(SplitContainer container)
         {
             return this.collection.Contains(container);
         }
-
         public int IndexOf(SplitContainer container)
         {
             return this.collection.IndexOf(container);
         }
-
         public void Insert(int index, SplitContainer container)
         {
             this.collection.Insert(index, container);
         }
-
         public SplitContainer this[int index]
         {
             get => this.collection[index] as SplitContainer;

@@ -51,13 +51,11 @@
     <Compile Include="ControlElements.cs" />
     <Compile Include="SplitContainer.cs" />
     <Compile Include="SplitContainerCollection.cs" />
+    <Compile Include="SplitContainerContentCollection.cs" />
     <Page Include="Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="CustomControl1.cs">
-      <SubType>Code</SubType>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DockCanvas.cs" />
