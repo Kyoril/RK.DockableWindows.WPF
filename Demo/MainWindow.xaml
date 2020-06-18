@@ -4,9 +4,14 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Demo"
+        xmlns:docker="clr-namespace:Docker;assembly=Docker"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        
-    </Grid>
+    <DockPanel>
+        <!-- The dock canvas element -->
+        <docker:DockCanvas>
+            <!-- Currently, the canvas should support content -->
+            <TextBox></TextBox>
+        </docker:DockCanvas>
+    </DockPanel>
 </Window>
