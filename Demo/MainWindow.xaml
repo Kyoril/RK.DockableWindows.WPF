@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Demo"
         xmlns:docker="clr-namespace:Docker;assembly=Docker"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800"
+        Title="Docker Demo Application" Height="450" Width="800"
         ResizeMode="CanResizeWithGrip">
     <DockPanel>
         <!-- Main Menu of the application -->
@@ -28,10 +28,17 @@
             <!-- Setup split container elements -->
             <docker:DockCanvas.SplitContainers>
                 <!-- Main split container -->
-                <docker:SplitContainer>
+                <docker:SplitContainer docker:DockCanvas.Dock="Left">
                     <docker:WindowGroup>
                         <docker:DockWindow Title="Solution Explorer">
                             <TextBox BorderThickness="0,1,0,0"></TextBox>
+                        </docker:DockWindow>
+                    </docker:WindowGroup>
+                </docker:SplitContainer>
+                <docker:SplitContainer>
+                    <docker:WindowGroup>
+                        <docker:DockWindow Title="Properties">
+                            
                         </docker:DockWindow>
                     </docker:WindowGroup>
                 </docker:SplitContainer>

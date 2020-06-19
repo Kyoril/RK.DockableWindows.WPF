@@ -30,6 +30,15 @@ namespace Docker
                     FrameworkPropertyMetadataOptions.AffectsMeasure, 
                     new PropertyChangedCallback(DockCanvas.OnContentSizeChanged)), 
                 new ValidateValueCallback((o) => (double)o > 0.0));
+        public static readonly DependencyProperty DockProperty =
+            DependencyProperty.RegisterAttached(
+                "Dock", 
+                typeof(Dock), 
+                typeof(DockCanvas), 
+                new FrameworkPropertyMetadata(
+                    Dock.Right, 
+                    FrameworkPropertyMetadataOptions.AffectsParentArrange, 
+                    new PropertyChangedCallback(DockCanvas.OnDockChanged)));
         #endregion
 
 
@@ -45,6 +54,10 @@ namespace Docker
             (d as DockCanvas).background.Fill = (Brush)e.NewValue;
         }
         private static void OnContentSizeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            // TODO: Update dock hierarchy
+        }
+        private static void OnDockChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             // TODO: Update dock hierarchy
         }
@@ -78,6 +91,29 @@ namespace Docker
 
             // Create the dock hierachy presenter and add it to the layout panel.
             this.layoutPanel.Children.Add(this.hierarchyPresenter);
+        }
+        #endregion
+
+
+        #region Methods
+        [AttachedPropertyBrowsableForChildren]
+        public static Dock GetDock(UIElement element)
+        {
+            if (element == null)
+            {
+                throw new ArgumentNullException(nameof(element));
+            }
+
+            return (Dock)element.GetValue(DockCanvas.DockProperty);
+        }
+        public static void SetDock(UIElement element, Dock dock)
+        {
+            if (element == null)
+            {
+                throw new ArgumentNullException(nameof(element));
+            }
+
+            element.SetValue(DockCanvas.DockProperty, dock);
         }
         #endregion
 

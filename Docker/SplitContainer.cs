@@ -52,8 +52,8 @@ namespace Docker
         {
             Size size;
 
-            // TODO: Depending on the dock side, use an alternative size value
-            Dock dockSide = Dock.Right;
+            // Depending on the dock side, use an alternative size value
+            Dock dockSide = DockCanvas.GetDock(this);
             switch(dockSide)
             {
                 case Dock.Top:

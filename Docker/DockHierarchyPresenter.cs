@@ -35,8 +35,8 @@ namespace Docker
             // Iterate through the containers
             foreach(SplitContainer container in this.parent.SplitContainers)
             {
-                // TODO: Determine the dock side of each split container
-                Dock dockSide = Dock.Right;
+                // Determine the dock side of each split container
+                Dock dockSide = DockCanvas.GetDock(container);
 
                 // Depending on the dock side, we need to arrange the container differently
                 switch(dockSide)
@@ -73,8 +73,8 @@ namespace Docker
             // Iterate through all split containers
             foreach(SplitContainer container in this.parent.SplitContainers)
             {
-                // TODO: Get the dock side
-                Dock dockSide = Dock.Right;
+                // Get the dock side
+                Dock dockSide = DockCanvas.GetDock(container);
 
                 // Calculate the available size first and measure the container
                 Size available = new Size(
