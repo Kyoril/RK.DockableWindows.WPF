@@ -13,6 +13,7 @@ using System.Windows.Markup;
 namespace Docker
 {
     [ContentProperty("Child")]
+    [DefaultProperty("Title")]
     public class DockWindow : Control
     {
         #region Dependency Properties
@@ -24,6 +25,20 @@ namespace Docker
                 new FrameworkPropertyMetadata(
                     null,
                     new PropertyChangedCallback(DockWindow.OnChildChanged)));
+        public static readonly DependencyProperty TitleProperty = 
+            DependencyProperty.Register(
+                "Title", 
+                typeof(string), 
+                typeof(DockWindow), 
+                new FrameworkPropertyMetadata(
+                    string.Empty, 
+                    new PropertyChangedCallback(DockWindow.OnTitleChanged)));
+        public static readonly DependencyProperty TabTextProperty = 
+            DependencyProperty.Register(
+                "TabText", 
+                typeof(string), 
+                typeof(DockWindow), 
+                new FrameworkPropertyMetadata(string.Empty));
         public static readonly DependencyProperty IsSelectedProperty =
             DependencyProperty.Register(
                 "IsSelected",
@@ -58,6 +73,18 @@ namespace Docker
                 window.AddLogicalChild(newValue);
             }
         }
+        private static void OnTitleChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            DockWindow window = (DockWindow)d;
+
+            string oldValue = (string)e.OldValue;
+            string newValue = (string)e.NewValue;
+
+            if (StringComparer.CurrentCulture.Compare(window.TabText, oldValue) == 0)
+            {
+                window.TabText = newValue;
+            }
+        }
         #endregion
 
 
@@ -87,6 +114,18 @@ namespace Docker
         {
             get => (bool)GetValue(IsSelectedProperty);
             internal set => SetValue(IsSelectedProperty, value);
+        }
+        [Category("Text")]
+        public string TabText
+        {
+            get => (string)GetValue(TabTextProperty);
+            set => SetValue(TabTextProperty, value);
+        }
+        [Category("Common Properties")]
+        public string Title
+        {
+            get => (string)GetValue(TitleProperty);
+            set => SetValue(TitleProperty, value);
         }
         #endregion
     }

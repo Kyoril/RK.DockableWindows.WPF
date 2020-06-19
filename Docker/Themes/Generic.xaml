@@ -137,7 +137,7 @@
                     <TextBlock Name="TitleBarLabel" 
                                Padding="0,1,0,2" 
                                TextTrimming="CharacterEllipsis" 
-                               Text="TitleBarLabelText"
+                               Text="{Binding Path=SelectedWindow.Title, RelativeSource={RelativeSource TemplatedParent}}"
                                DockPanel.Dock="Left"/>
                     <Border Background="Transparent" Margin="8,0,8,0">
                         <Rectangle Margin="0,7,0,5">
