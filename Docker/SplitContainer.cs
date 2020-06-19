@@ -40,8 +40,12 @@ namespace Docker
         }
         protected override Size MeasureOverride(Size availableSize)
         {
-            //TODO
-            
+            // This is a big TODO
+            foreach (FrameworkElement element in this.Children)
+            {
+                element.Measure(availableSize);
+            }
+
             return availableSize;
         }
         protected override IEnumerator LogicalChildren => this.Children.GetEnumerator();

@@ -3,7 +3,6 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="clr-namespace:Docker">
 
-    
     <!-- Default background brush for DockCanvas element -->
     <SolidColorBrush x:Key="{ComponentResourceKey ResourceId={x:Static local:ControlElements.DockCanvasBackgroundBrush}, TypeInTargetAssembly={x:Type local:ControlElements}}" 
                      Color="#EEEEF2" />
@@ -165,11 +164,14 @@
             <Border Grid.Row="1">
                 <Border.Style>
                     <Style>
-                        <Setter Property="Control.BorderBrush" Value="{DynamicResource {ComponentResourceKey ResourceId={x:Static local:ControlElements.DockControlBorderBrush},TypeInTargetAssembly={x:Type local:ControlElements}}}" />
-                        <Setter Property="Control.BorderThickness" Value="1,0,1,1" />
+                        <Setter Property="Control.BorderBrush" 
+                                Value="{DynamicResource {ComponentResourceKey ResourceId={x:Static local:ControlElements.DockControlBorderBrush},TypeInTargetAssembly={x:Type local:ControlElements}}}" />
+                        <Setter Property="Control.BorderThickness" 
+                                Value="1,0,1,1" />
                     </Style>
                 </Border.Style>
-                <ContentPresenter Margin="{TemplateBinding Padding}" />
+                <ContentPresenter Margin="{TemplateBinding Padding}" 
+                                  ContentSource="SelectedWindow" />
             </Border>
             
             <!-- WindowList part (tabs) -->
@@ -179,11 +181,29 @@
         <!-- Triggers -->
         <ControlTemplate.Triggers>
             <!-- Change the title bar style to use ActiveDockedTitleBar when the control is focused -->
-            <Trigger Property="UIElement.IsKeyboardFocusWithin" Value="True">
+            <Trigger Property="UIElement.IsKeyboardFocusWithin" 
+                     Value="True">
                 <Setter TargetName="PART_TitleBar" 
                         Property="FrameworkElement.Style" 
                         Value="{DynamicResource {ComponentResourceKey ResourceId={x:Static local:ControlElements.ActiveDockedTitleBar}, TypeInTargetAssembly={x:Type local:DockCanvas}}}" />
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
+
+    <Style x:Key="{x:Type local:DockWindow}" 
+           TargetType="{x:Type local:DockWindow}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type local:DockWindow}">
+                    <AdornerDecorator>
+                        <Border BorderThickness="{TemplateBinding BorderThickness}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                Background="{TemplateBinding Background}">
+                            <ContentPresenter ContentSource="Child" />
+                        </Border>
+                    </AdornerDecorator>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 </ResourceDictionary>

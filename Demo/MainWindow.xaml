@@ -30,7 +30,9 @@
                 <!-- Main split container -->
                 <docker:SplitContainer>
                     <docker:WindowGroup>
-
+                        <docker:DockWindow>
+                            <TextBox></TextBox>
+                        </docker:DockWindow>
                     </docker:WindowGroup>
                 </docker:SplitContainer>
             </docker:DockCanvas.SplitContainers>

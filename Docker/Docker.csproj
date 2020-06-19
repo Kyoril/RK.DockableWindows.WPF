@@ -52,10 +52,12 @@
   <ItemGroup>
     <Compile Include="ControlElements.cs" />
     <Compile Include="DockHierarchyPresenter.cs" />
+    <Compile Include="DockWindow.cs" />
     <Compile Include="DynamicTemplates.cs" />
     <Compile Include="SplitContainer.cs" />
     <Compile Include="SplitContainerCollection.cs" />
     <Compile Include="SplitContainerContentCollection.cs" />
+    <Compile Include="DockWindowCollection.cs" />
     <Compile Include="WindowGroup.cs" />
     <Page Include="Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
