@@ -44,6 +44,13 @@ namespace Docker
                 new FrameworkPropertyMetadata(
                     new PropertyChangedCallback(
                         WindowGroup.OnSelectedWindowChanged)));
+        private static readonly DependencyPropertyKey HasMultipleWindowsPropertyKey = 
+            DependencyProperty.RegisterReadOnly(
+                "HasMultipleWindows", 
+                typeof(bool), 
+                typeof(WindowGroup), 
+                new FrameworkPropertyMetadata(false));
+        public static readonly DependencyProperty HasMultipleWindowsProperty = HasMultipleWindowsPropertyKey.DependencyProperty;
         #endregion
 
 
@@ -96,11 +103,15 @@ namespace Docker
         }
         internal void OnChildrenChanged()
         {
+            // Mark the first available window the selected one if there isn't any already and
+            // if there are windows available at all
             if ((this.SelectedWindow == null) && (this.Windows.Count != 0))
             {
                 this.SelectedWindow = this.Windows[0];
             }
 
+            // If there is a selected window, but it isn't registered as a child window of this group,
+            // try to find a new selected window (or reset to null).
             if ((this.SelectedWindow != null) && !this.Windows.Contains(this.SelectedWindow))
             {
                 if (this.Windows.Count != 0)
@@ -112,6 +123,9 @@ namespace Docker
                     this.SelectedWindow = null;
                 }
             }
+            
+            // Eventually update the tab bar visibility
+            this.HasMultipleWindows = this.Windows.Count > 1;
         }
         #endregion
 
@@ -124,6 +138,22 @@ namespace Docker
         {
             get => (DockWindow)base.GetValue(SelectedWindowProperty);
             set => base.SetValue(SelectedWindowProperty, value);
+        }
+        /// <summary>
+        /// This property is used to toggle the visibility of the tab bar beneath the window group.
+        /// If there is only a single window available in the group, we might not want to show a tab
+        /// bar at all (this mimics Visual Studio behavior).
+        /// </summary>
+        public bool HasMultipleWindows
+        {
+            get
+            {
+                return (bool)base.GetValue(HasMultipleWindowsProperty);
+            }
+            private set
+            {
+                base.SetValue(HasMultipleWindowsPropertyKey, value);
+            }
         }
         #endregion
     }

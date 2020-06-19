@@ -19,7 +19,21 @@ namespace Docker
         private DockHierarchyPresenter hierarchyPresenter;
 
 
-        #region DependencyProperties
+        #region Dependency Properties
+        public static readonly DependencyProperty ContentSizeProperty = 
+            DependencyProperty.RegisterAttached(
+                "ContentSize", 
+                typeof(double), 
+                typeof(DockCanvas), 
+                new FrameworkPropertyMetadata(
+                    200.0, 
+                    FrameworkPropertyMetadataOptions.AffectsMeasure, 
+                    new PropertyChangedCallback(DockCanvas.OnContentSizeChanged)), 
+                new ValidateValueCallback((o) => (double)o > 0.0));
+        #endregion
+
+
+        #region DependencyProperty Callbacks
         /// <summary>
         /// Callback for a change of the Control's background property. If the property was changed, we want to update
         /// our background visual element.
@@ -29,6 +43,10 @@ namespace Docker
         private static void OnBackgroundChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             (d as DockCanvas).background.Fill = (Brush)e.NewValue;
+        }
+        private static void OnContentSizeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            // TODO: Update dock hierarchy
         }
         #endregion
 

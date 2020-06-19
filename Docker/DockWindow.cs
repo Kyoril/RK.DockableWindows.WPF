@@ -44,6 +44,13 @@ namespace Docker
                 "IsSelected",
                 typeof(bool),
                 typeof(DockWindow));
+        public static readonly DependencyProperty ContentSizeProperty = 
+            DependencyProperty.Register(
+                "ContentSize", 
+                typeof(double), 
+                typeof(DockWindow), 
+                new FrameworkPropertyMetadata(225.0), 
+                new ValidateValueCallback((o) => (double)o > 0.0));
         #endregion
 
 
@@ -126,6 +133,12 @@ namespace Docker
         {
             get => (string)GetValue(TitleProperty);
             set => SetValue(TitleProperty, value);
+        }
+        [Category("Docking")]
+        public double ContentSize
+        {
+            get => (double)GetValue(ContentSizeProperty);
+            set => SetValue(ContentSizeProperty, value);
         }
         #endregion
     }

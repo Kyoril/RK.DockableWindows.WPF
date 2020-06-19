@@ -2,6 +2,7 @@
 using System.Collections;
 using System.ComponentModel;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Markup;
 using System.Windows.Media;
 
@@ -26,7 +27,16 @@ namespace Docker
             this.Children = new SplitContainerContentCollection(this);
         }
         #endregion
-        
+
+
+        #region Internal Properties
+        internal double ContentSize
+        {
+            get => (double)base.GetValue(DockCanvas.ContentSizeProperty);
+            set => base.SetValue(DockCanvas.ContentSizeProperty, value);
+        }
+        #endregion
+
 
         #region FrameworkElement overrides
         protected override Size ArrangeOverride(Size finalSize)
@@ -40,13 +50,28 @@ namespace Docker
         }
         protected override Size MeasureOverride(Size availableSize)
         {
+            Size size;
+
+            // TODO: Depending on the dock side, use an alternative size value
+            Dock dockSide = Dock.Right;
+            switch(dockSide)
+            {
+                case Dock.Top:
+                case Dock.Bottom:
+                    size = new Size(availableSize.Width, this.ContentSize);
+                    break;
+                default:
+                    size = new Size(this.ContentSize, availableSize.Height);
+                    break;
+            }
+
             // This is a big TODO
             foreach (FrameworkElement element in this.Children)
             {
-                element.Measure(availableSize);
+                element.Measure(size);
             }
 
-            return availableSize;
+            return size;
         }
         protected override IEnumerator LogicalChildren => this.Children.GetEnumerator();
         protected override int VisualChildrenCount => this.Children.Count;
