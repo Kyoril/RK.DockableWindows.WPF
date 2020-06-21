@@ -25,25 +25,41 @@
         
         <!-- The dock canvas element -->
         <docker:DockCanvas>
-            <!-- Setup split container elements -->
+            <!-- Dockable windows -->
             <docker:DockCanvas.SplitContainers>
-                <!-- Main split container -->
+                <!-- Left dock side -->
                 <docker:SplitContainer docker:DockCanvas.Dock="Left">
-                    <docker:WindowGroup>
-                        <docker:DockWindow Title="Solution Explorer">
-                            <TextBox BorderThickness="0,1,0,0"></TextBox>
-                        </docker:DockWindow>
-                    </docker:WindowGroup>
+                    <docker:SplitContainer>
+                        <docker:WindowGroup>
+                            <docker:DockWindow Title="Solution Explorer">
+                                <TextBox BorderThickness="0"></TextBox>
+                            </docker:DockWindow>
+                        </docker:WindowGroup>
+                        <docker:WindowGroup>
+                            <docker:DockWindow Title="Test">
+                                <TextBox BorderThickness="0"></TextBox>
+                            </docker:DockWindow>
+                        </docker:WindowGroup>
+                    </docker:SplitContainer>
                 </docker:SplitContainer>
+
+                <!-- Right dock side -->
                 <docker:SplitContainer>
                     <docker:WindowGroup>
                         <docker:DockWindow Title="Properties">
+                            <TextBox BorderThickness="0"/>
+                        </docker:DockWindow>
+                    </docker:WindowGroup>
+                </docker:SplitContainer>
 
+                <docker:SplitContainer docker:DockCanvas.Dock="Bottom">
+                    <docker:WindowGroup>
+                        <docker:DockWindow Title="Output">
+                            <TextBox BorderThickness="0"/>
                         </docker:DockWindow>
                     </docker:WindowGroup>
                 </docker:SplitContainer>
             </docker:DockCanvas.SplitContainers>
-            <TextBox />
         </docker:DockCanvas>
     </DockPanel>
 </Window>

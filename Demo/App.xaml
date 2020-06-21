@@ -4,6 +4,14 @@
              xmlns:local="clr-namespace:Demo"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+
+        <Style x:Key="{x:Type Menu}" TargetType="{x:Type Menu}">
+            <Setter Property="Background">
+                <Setter.Value>
+                    <SolidColorBrush Color="#EEEEF2" />
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
     </Application.Resources>
 </Application>
