@@ -120,9 +120,35 @@ namespace Docker
                 return this.parent.SplitContainers[index];
             }
 
+            // Reduce the index to check if the child is requested
+            index -= this.parent.SplitContainers.Count;
+            if (this.Child != null)
+            {
+                if (index == 0)
+                {
+                    return this.Child;
+                }
+
+                index--;
+            }
+
             throw new ArgumentOutOfRangeException(nameof(index));
         }
-        protected override int VisualChildrenCount => this.parent.SplitContainers.Count;
+        protected override int VisualChildrenCount
+        {
+            get
+            {
+                int count = this.parent.SplitContainers.Count;
+
+                // Add child window
+                if (this.Child != null)
+                {
+                    count++;
+                }
+
+                return count;
+            }
+        }
         #endregion
 
 
@@ -137,13 +163,14 @@ namespace Docker
                 {
                     if (this.child != null)
                     {
-                        this.RemoveVisualChild(child);
+                        this.RemoveVisualChild(this.child);
                     }
 
                     this.child = value;
+
                     if (this.child != null)
                     {
-                        this.AddVisualChild(child);
+                        this.AddVisualChild(this.child);
                     }
                 }
             }
