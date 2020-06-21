@@ -212,6 +212,7 @@ namespace Docker
                     }
 
                     this.child = value;
+                    this.hierarchyPresenter.Child = value;
 
                     if (this.child != null)
                     {

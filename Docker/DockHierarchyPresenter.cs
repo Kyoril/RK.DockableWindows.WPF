@@ -97,9 +97,17 @@ namespace Docker
                         break;
                     case Dock.Left:
                     case Dock.Right:
-                        size.Width += container.DesiredSize.Height;
+                        size.Width += container.DesiredSize.Width;
                         break;
                 }
+            }
+
+            if (Child != null)
+            {
+                Child.Measure(
+                    new Size(
+                        Math.Max(availableSize.Width - size.Width, 0.0),
+                        Math.Max(availableSize.Height - size.Height, 0.0)));
             }
 
             return size;

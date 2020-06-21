@@ -38,11 +38,12 @@
                 <docker:SplitContainer>
                     <docker:WindowGroup>
                         <docker:DockWindow Title="Properties">
-                            
+
                         </docker:DockWindow>
                     </docker:WindowGroup>
                 </docker:SplitContainer>
             </docker:DockCanvas.SplitContainers>
+            <TextBox />
         </docker:DockCanvas>
     </DockPanel>
 </Window>
