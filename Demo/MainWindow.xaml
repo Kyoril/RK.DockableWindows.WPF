@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Demo"
         xmlns:docker="clr-namespace:Docker;assembly=Docker"
         mc:Ignorable="d"
-        Title="Docker Demo Application" Height="450" Width="800"
+        Title="Docker Demo Application" Height="450" Width="772.889"
         ResizeMode="CanResizeWithGrip">
     <DockPanel>
         <!-- Main Menu of the application -->

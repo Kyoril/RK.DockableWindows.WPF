@@ -62,6 +62,11 @@ namespace Docker
                 }
             }
 
+            if (Child != null)
+            {
+                Child.Arrange(final);
+            }
+
             // The size isn't changed
             return finalSize;
         }
@@ -110,6 +115,31 @@ namespace Docker
             throw new ArgumentOutOfRangeException(nameof(index));
         }
         protected override int VisualChildrenCount => this.parent.SplitContainers.Count;
+        #endregion
+
+
+        #region Properties
+        private UIElement child;
+        internal UIElement Child
+        {
+            get => this.child;
+            set
+            {
+                if (value != this.child)
+                {
+                    if (this.child != null)
+                    {
+                        this.RemoveVisualChild(child);
+                    }
+
+                    this.child = value;
+                    if (this.child != null)
+                    {
+                        this.AddVisualChild(child);
+                    }
+                }
+            }
+        }
         #endregion
     }
 }

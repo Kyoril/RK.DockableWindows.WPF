@@ -59,7 +59,21 @@ namespace Docker
         }
         private static void OnDockChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            // TODO: Update dock hierarchy
+            // Update splitter orientation for split containers
+            if (d is SplitContainer element)
+            {
+                Dock newValue = (Dock)e.NewValue;
+                switch(newValue)
+                {
+                    case Dock.Left:
+                    case Dock.Right:
+                        element.ClearValue(SplitContainer.SplitterOrientationProperty);
+                        break;
+                    default:
+                        element.SetValue(SplitContainer.SplitterOrientationProperty, Orientation.Vertical);
+                        break;
+                }
+            }
         }
         #endregion
 
