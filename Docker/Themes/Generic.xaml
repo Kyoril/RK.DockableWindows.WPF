@@ -82,7 +82,22 @@
         <Setter Property="Control.Background" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
         <Setter Property="TextElement.Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" />
     </Style>
+    
+    <!-- TitleBarButton -->
+    <Style x:Key="{ComponentResourceKey ResourceId={x:Static local:ControlElements.TitleBarButton}, TypeInTargetAssembly={x:Type local:DockCanvas}}">
+        <Setter Property="Control.BorderThickness" Value="1" />
+    </Style>
+    
+    <!-- InactiveTitleBarButtonHot -->
+    <Style x:Key="{ComponentResourceKey ResourceId={x:Static local:ControlElements.InactiveTitleBarButtonHot}, TypeInTargetAssembly={x:Type local:DockCanvas}}" BasedOn="{StaticResource {ComponentResourceKey ResourceId={x:Static local:ControlElements.TitleBarButton}, TypeInTargetAssembly={x:Type local:DockCanvas}}}">
+        <Setter Property="Control.Background" Value="#60FFFFFF" />
+    </Style>
 
+    <!-- ActiveTitleBarButtonHot -->
+    <Style x:Key="{ComponentResourceKey ResourceId={x:Static local:ControlElements.ActiveTitleBarButtonHot}, TypeInTargetAssembly={x:Type local:DockCanvas}}" BasedOn="{StaticResource {ComponentResourceKey ResourceId={x:Static local:ControlElements.TitleBarButton}, TypeInTargetAssembly={x:Type local:DockCanvas}}}">
+        <Setter Property="Control.Background" Value="#60FFFFFF" />
+    </Style>
+    
     <!-- WindowGroupTemplate -->
     <ControlTemplate x:Key="{ComponentResourceKey ResourceId={x:Static local:DynamicTemplates.WindowGroupTemplate}, TypeInTargetAssembly={x:Type local:DynamicTemplates}}" TargetType="{x:Type local:WindowGroup}">
         <!-- Window consists of a grid with three rows: TitleBar, Content, WindowList (tabs)-->
