@@ -132,6 +132,14 @@ namespace Docker
         #endregion
 
 
+        #region Internal methods
+        internal void OnSplitContainersChanged()
+        {
+            this.hierarchyPresenter.InvalidateSplitters();
+        }
+        #endregion
+
+
         #region Control overrides
         /// <summary>
         /// Updates the size of all visual children when required.

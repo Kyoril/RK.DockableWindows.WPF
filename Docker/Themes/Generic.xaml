@@ -90,7 +90,7 @@
     
     <!-- InactiveTitleBarButtonHot -->
     <Style x:Key="{ComponentResourceKey ResourceId={x:Static local:ControlElements.InactiveTitleBarButtonHot}, TypeInTargetAssembly={x:Type local:DockCanvas}}" BasedOn="{StaticResource {ComponentResourceKey ResourceId={x:Static local:ControlElements.TitleBarButton}, TypeInTargetAssembly={x:Type local:DockCanvas}}}">
-        <Setter Property="Control.Background" Value="#60FFFFFF" />
+        <Setter Property="Control.Background" Value="#7FFFFFFF" />
     </Style>
 
     <!-- ActiveTitleBarButtonHot -->
@@ -222,4 +222,27 @@
         </Setter>
     </Style>
 
+    <!-- SplitContainerSplitter -->
+    <Style x:Key="{x:Type local:SplitContainerSplitter}" TargetType="{x:Type local:SplitContainerSplitter}">
+        <Setter Property="Background" Value="#00FFFFFF" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type local:SplitContainerSplitter}">
+                    <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" />
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    <!-- ResizeControlSplitter -->
+    <Style x:Key="{x:Type local:ResizeControlSplitter}" TargetType="{x:Type local:ResizeControlSplitter}">
+        <Setter Property="Background" Value="#00FFFFFF" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type local:ResizeControlSplitter}">
+                    <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" />
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 </ResourceDictionary>

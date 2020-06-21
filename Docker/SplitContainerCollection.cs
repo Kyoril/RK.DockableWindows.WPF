@@ -24,15 +24,26 @@ namespace Docker
         #endregion
 
 
+        #region Internal methods
+        private void InvalidateParent()
+        {
+            this.parent.InvalidateMeasure();
+            this.parent.OnSplitContainersChanged();
+        }
+        #endregion
+
+
         #region Public Methods
         public int Add(SplitContainer container)
         {
             int result = this.collection.Add(container);
+            this.InvalidateParent();
             return result;
         }
         public void Remove(SplitContainer container)
         {
             this.collection.Remove(container);
+            this.InvalidateParent();
         }
         public bool Contains(SplitContainer container)
         {
@@ -45,6 +56,7 @@ namespace Docker
         public void Insert(int index, SplitContainer container)
         {
             this.collection.Insert(index, container);
+            this.InvalidateParent();
         }
         public SplitContainer this[int index]
         {
@@ -69,6 +81,7 @@ namespace Docker
             }
 
             this.collection.Clear();
+            this.InvalidateParent();
         }
         public bool Contains(object value)
         {
@@ -89,6 +102,7 @@ namespace Docker
         public void RemoveAt(int index)
         {
             this.collection.RemoveAt(index);
+            this.InvalidateParent();
         }
         object IList.this[int index]
         {

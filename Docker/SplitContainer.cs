@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
@@ -15,6 +16,10 @@ namespace Docker
     [ContentProperty("Children")]
     public class SplitContainer : FrameworkElement
     {
+        private List<SplitContainerSplitter> splitters;
+        private bool splittersInvalid;
+
+
         #region Events
         public event EventHandler ChildrenChanged;
         #endregion
@@ -57,6 +62,9 @@ namespace Docker
 
         public SplitContainer()
         {
+            // Setup splitters
+            this.splitters = new List<SplitContainerSplitter>();
+
             // Setup the content collection
             this.Children = new SplitContainerContentCollection(this);
         }
@@ -79,6 +87,50 @@ namespace Docker
             }
 
             return num;
+        }
+        private double GetTotalSplitterExtent()
+        {
+            double extent = 0.0;
+
+            foreach (SplitContainerSplitter splitter in this.splitters)
+            {
+                extent += (this.SplitterOrientation == Orientation.Horizontal) ? splitter.DesiredSize.Height : splitter.DesiredSize.Width;
+            }
+
+            return extent;
+        }
+        private void RecreateSplitters()
+        {
+            // Avoid recreating of splitters when accessing any other method
+            this.splittersInvalid = false;
+
+            // Remove old splitters
+            foreach (SplitContainerSplitter splitter in this.splitters)
+            {
+                this.RemoveVisualChild(splitter);
+            }
+
+            List<SplitContainerSplitter> splitters = new List<SplitContainerSplitter>();
+            List<FrameworkElement> elements = new List<FrameworkElement>();
+
+            FrameworkElement beforeElement = null;
+
+            // Iterate through each child
+            foreach (FrameworkElement child in Children)
+            {
+                if (beforeElement != null)
+                {
+                    SplitContainerSplitter splitter = new SplitContainerSplitter(beforeElement, child, this.SplitterOrientation);
+                    base.AddVisualChild(splitter);
+                    splitters.Add(splitter);
+                }
+
+                beforeElement = child;
+                elements.Add(child);
+            }
+            
+            // We have new splitters
+            this.splitters = splitters;
         }
         #endregion
 
@@ -117,11 +169,28 @@ namespace Docker
         protected override Size ArrangeOverride(Size finalSize)
         {
             double leadingSize = (this.SplitterOrientation == Orientation.Horizontal) ? finalSize.Height : finalSize.Width;
+            leadingSize = Math.Max(leadingSize - this.GetTotalSplitterExtent(), 0.0);
+
             double totalDesiredExtent = this.GetTotalDesiredExtent();
             double y = 0.0;
-            
+
+            int index = 0;
+            bool updateSplitters = false;
+
             foreach (UIElement element in this.Children)
             {
+                // There is a splitter between two elements, so for the first element, we skip
+                // updating the respective splitter
+                if (updateSplitters)
+                {
+                    SplitContainerSplitter splitter = this.splitters[index++];
+
+                    Rect rect = (this.SplitterOrientation == Orientation.Horizontal) ? new Rect(0.0, y, finalSize.Width, splitter.DesiredSize.Height) : new Rect(y, 0.0, splitter.DesiredSize.Width, finalSize.Height);
+                    splitter.Arrange(rect);
+
+                    y += (this.SplitterOrientation == Orientation.Horizontal) ? splitter.DesiredSize.Height : splitter.DesiredSize.Width;
+                }
+
                 Size workingSize = GetWorkingSize(element);
 
                 double leadWorkingSize = (this.SplitterOrientation == Orientation.Horizontal) ? workingSize.Height : workingSize.Width;
@@ -132,6 +201,9 @@ namespace Docker
                 element.Arrange(finalRect);
 
                 y += leadWorkingSize;
+
+                // From now on, update splitters
+                updateSplitters = true;
             }
             
             return finalSize;
@@ -139,6 +211,11 @@ namespace Docker
         protected override Size MeasureOverride(Size availableSize)
         {
             Size size;
+            
+            if (this.splittersInvalid)
+            {
+                this.RecreateSplitters();
+            }
 
             // Depending on the dock side, use an alternative size value
             Dock dockSide = DockCanvas.GetDock(this);
@@ -153,9 +230,15 @@ namespace Docker
                     break;
             }
 
-            // This is a big TODO
-            double elementSize = Math.Max((this.SplitterOrientation == Orientation.Horizontal) ? size.Height : size.Width, 0.0);
+            // Measure all splitters
+            foreach (SplitContainerSplitter splitter in this.splitters)
+            {
+                splitter.Measure(size);
+            }
+            
+            double elementSize = Math.Max((this.SplitterOrientation == Orientation.Horizontal) ? size.Height - this.GetTotalSplitterExtent() : size.Width - this.GetTotalSplitterExtent(), 0.0);
             double totalDesiredExtent = this.GetTotalDesiredExtent();
+
             foreach (FrameworkElement element in this.Children)
             {
                 if (this.SplitterOrientation == Orientation.Horizontal)
@@ -173,10 +256,32 @@ namespace Docker
             return size;
         }
         protected override IEnumerator LogicalChildren => this.Children.GetEnumerator();
-        protected override int VisualChildrenCount => this.Children.Count;
+        protected override int VisualChildrenCount
+        {
+            get
+            {
+                if (this.splittersInvalid)
+                {
+                    this.RecreateSplitters();
+                }
+
+                return this.Children.Count + this.splitters.Count;
+            }
+        }
         protected override Visual GetVisualChild(int index)
         {
-            return this.Children[index];
+            if (this.splittersInvalid)
+            {
+                this.RecreateSplitters();
+            }
+
+            if (index < this.Children.Count)
+            {
+                return this.Children[index];
+            }
+
+            index -= this.Children.Count;
+            return this.splitters[index];
         }
         #endregion
 
@@ -200,11 +305,13 @@ namespace Docker
         }
         internal void OnChildrenChanging()
         {
-            InvalidateMeasure();
+            this.splittersInvalid = true;
+            this.InvalidateMeasure();
         }
         internal void OnChildrenChanged()
         {
-            InvalidateMeasure();
+            this.splittersInvalid = true;
+            this.InvalidateMeasure();
             this.ChildrenChanged?.Invoke(this, EventArgs.Empty);
         }
         #endregion
