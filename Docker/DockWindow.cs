@@ -25,35 +25,36 @@ namespace Docker
                 new FrameworkPropertyMetadata(
                     null,
                     new PropertyChangedCallback(DockWindow.OnChildChanged)));
-        public static readonly DependencyProperty TitleProperty = 
+        public static readonly DependencyProperty TitleProperty =
             DependencyProperty.Register(
-                "Title", 
-                typeof(string), 
-                typeof(DockWindow), 
+                "Title",
+                typeof(string),
+                typeof(DockWindow),
                 new FrameworkPropertyMetadata(
-                    string.Empty, 
+                    string.Empty,
                     new PropertyChangedCallback(DockWindow.OnTitleChanged)));
-        public static readonly DependencyProperty TabTextProperty = 
+        public static readonly DependencyProperty TabTextProperty =
             DependencyProperty.Register(
-                "TabText", 
-                typeof(string), 
-                typeof(DockWindow), 
+                "TabText",
+                typeof(string),
+                typeof(DockWindow),
                 new FrameworkPropertyMetadata(string.Empty));
         public static readonly DependencyProperty IsSelectedProperty =
             DependencyProperty.Register(
                 "IsSelected",
                 typeof(bool),
                 typeof(DockWindow));
-        public static readonly DependencyProperty ContentSizeProperty = 
+        public static readonly DependencyProperty ContentSizeProperty =
             DependencyProperty.Register(
-                "ContentSize", 
-                typeof(double), 
-                typeof(DockWindow), 
-                new FrameworkPropertyMetadata(225.0), 
+                "ContentSize",
+                typeof(double),
+                typeof(DockWindow),
+                new FrameworkPropertyMetadata(225.0),
                 new ValidateValueCallback((o) => (double)o > 0.0));
         #endregion
 
 
+        #region Construction
         static DockWindow()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(DockWindow), new FrameworkPropertyMetadata(typeof(DockWindow)));
@@ -61,6 +62,8 @@ namespace Docker
             KeyboardNavigation.DirectionalNavigationProperty.OverrideMetadata(typeof(DockWindow), new FrameworkPropertyMetadata(KeyboardNavigationMode.Cycle));
             KeyboardNavigation.TabNavigationProperty.OverrideMetadata(typeof(DockWindow), new FrameworkPropertyMetadata(KeyboardNavigationMode.Cycle));
         }
+        #endregion
+
 
 
         #region Dependency Property Callbacks
@@ -90,6 +93,21 @@ namespace Docker
             if (StringComparer.CurrentCulture.Compare(window.TabText, oldValue) == 0)
             {
                 window.TabText = newValue;
+            }
+        }
+        #endregion
+
+
+        #region Internal Methods
+        internal void SelectAndPopup()
+        {
+            if (this.Parent is WindowGroup parent)
+            {
+                if (parent.SelectedWindow != this)
+                {
+                    parent.SelectedWindow = this;
+                    parent.UpdateLayout();
+                }
             }
         }
         #endregion
