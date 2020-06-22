@@ -143,7 +143,9 @@
                             DockPanel.Dock="Right" 
                             Padding="1" 
                             Template="{StaticResource TitleBarButtonTemplate}" 
-                            Foreground="{Binding ElementName=PART_TitleBar, Path=(TextElement.Foreground)}">
+                            Foreground="{Binding ElementName=PART_TitleBar, Path=(TextElement.Foreground)}"
+                            Command="{x:Static local:DockWindow.CloseCommand}"
+                            CommandTarget="{Binding Path=SelectedWindow, RelativeSource={RelativeSource TemplatedParent}}">
                         <TextBlock FontFamily="Marlett" FontSize="12" Text="r" />
                     </Button>
                     <Button Name="PART_PinButton" 

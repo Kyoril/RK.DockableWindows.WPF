@@ -27,7 +27,10 @@ namespace Docker
     [TemplatePart(Name = "PART_WindowList", Type = typeof(WindowList))]
     [ContentProperty("Windows")]
     public class WindowGroup : Control
-    {  
+    {
+        private FrameworkElement titleBar;
+
+
         #region Routed Commands
         /// <summary>
         /// A command to toggle the pinned state of a WindowGroup. A window group can be unpinned to minimize it.
@@ -87,9 +90,25 @@ namespace Docker
         }
         #endregion
 
-
+        
         #region Control overrides
         protected override IEnumerator LogicalChildren => this.Windows.GetEnumerator();
+        public override void OnApplyTemplate()
+        {
+            base.OnApplyTemplate();
+
+            if (titleBar != null)
+            {
+                titleBar.PreviewMouseDown -= new MouseButtonEventHandler(this.OnTitleBarPreviewMouseDown);
+            }
+
+            titleBar = base.GetTemplateChild("PART_TitleBar") as FrameworkElement;
+
+            if (titleBar != null)
+            {
+                titleBar.PreviewMouseDown += new MouseButtonEventHandler(this.OnTitleBarPreviewMouseDown);
+            }
+        }
         #endregion
 
 
@@ -127,6 +146,45 @@ namespace Docker
             
             // Eventually update the tab bar visibility
             this.HasMultipleWindows = this.Windows.Count > 1;
+        }
+        internal void Remove()
+        {
+            if (this.Parent is SplitContainer parent)
+            {
+                parent.Children.Remove(this);
+
+                if ((parent.Children.Count == 1) && (parent.Parent is SplitContainer splitContainerParent))
+                {
+                    int parentIndex = splitContainerParent.Children.IndexOf(parent);
+
+                    Size workingSize = SplitContainer.GetWorkingSize(parent);
+                    parent.Children.Remove(parent.Children[0]);
+
+                    splitContainerParent.Children.RemoveAt(parentIndex);
+                    splitContainerParent.Children.Insert(parentIndex, parent.Children[0]);
+
+                    SplitContainer.SetWorkingSize(parent.Children[0], workingSize);
+                    return;
+                }
+
+                // Remove the entire split container if there are no more children inside
+                if (parent.Children.Count == 0)
+                {
+                    parent.Remove();
+                }
+            }
+
+            if (this.Parent != null)
+            {
+                throw new InvalidOperationException();
+            }
+        }
+        private void OnTitleBarPreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (this.SelectedWindow != null)
+            {
+                this.SelectedWindow.SelectAndPopup(true);
+            }
         }
         #endregion
 

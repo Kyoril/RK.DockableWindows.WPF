@@ -18,6 +18,17 @@ namespace Docker
     [DefaultProperty("Title")]
     public class DockWindow : Control
     {
+        #region Routed Commands
+        public static readonly RoutedCommand CloseCommand = new RoutedCommand("Close", typeof(DockWindow));
+        #endregion
+
+
+        #region Events
+        public event EventHandler Closed;
+        public event CancelEventHandler Closing;
+        #endregion
+
+
         #region Dependency Properties
         public static readonly DependencyProperty ChildProperty =
             DependencyProperty.Register(
@@ -53,6 +64,12 @@ namespace Docker
                 typeof(DockWindow),
                 new FrameworkPropertyMetadata(225.0),
                 new ValidateValueCallback((o) => (double)o > 0.0));
+        public static readonly DependencyProperty AllowCloseProperty = 
+            DependencyProperty.Register(
+                "AllowClose", 
+                typeof(bool),
+                typeof(DockWindow), 
+                new FrameworkPropertyMetadata(true));
         #endregion
 
 
@@ -63,9 +80,48 @@ namespace Docker
 
             KeyboardNavigation.DirectionalNavigationProperty.OverrideMetadata(typeof(DockWindow), new FrameworkPropertyMetadata(KeyboardNavigationMode.Cycle));
             KeyboardNavigation.TabNavigationProperty.OverrideMetadata(typeof(DockWindow), new FrameworkPropertyMetadata(KeyboardNavigationMode.Cycle));
+
+            CommandManager.RegisterClassCommandBinding(
+                typeof(DockWindow), 
+                new CommandBinding(DockWindow.CloseCommand, new ExecutedRoutedEventHandler(DockWindow.OnCommand),
+                new CanExecuteRoutedEventHandler(DockWindow.OnCanExecute)));
         }
         #endregion
 
+
+        #region Public Methods
+        /// <summary>
+        /// Tries to close the DockWindow, making it disappear.
+        /// </summary>
+        /// <returns>True on success, false if the operation was cancelled.</returns>
+        public bool Close()
+        {
+            // Setup event args and raise the Closing event
+            CancelEventArgs e = new CancelEventArgs();
+            OnClosing(e);
+
+            // If the developer doesn't want to close the window, stop here
+            if (e.Cancel)
+            {
+                return false;
+            }
+
+            // Remove the DockWindow
+            if (this.Parent is WindowGroup parent)
+            {
+                parent.Windows.Remove(this);
+                if (parent.Windows.Count == 0)
+                {
+                    parent.Remove();
+                }
+            }
+
+            // Raise the closed event in case the developer want's to react to it.
+            OnClosed(EventArgs.Empty);
+            
+            return true;
+        }
+        #endregion
 
 
         #region Dependency Property Callbacks
@@ -101,6 +157,30 @@ namespace Docker
 
 
         #region Internal Methods
+        private static void OnCommand(object sender, ExecutedRoutedEventArgs e)
+        {
+            DockWindow window = (DockWindow)sender;
+            if (e.Command == DockWindow.CloseCommand)
+            {
+                window.Close();
+            }
+        }
+        private static void OnCanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            DockWindow window = (DockWindow)sender;
+            if (e.Command == DockWindow.CloseCommand)
+            {
+                e.CanExecute = window.AllowClose;
+            }
+        }
+        protected internal void OnClosed(EventArgs e)
+        {
+            this.Closed?.Invoke(this, e);
+        }
+        protected internal void OnClosing(CancelEventArgs e)
+        {
+            this.Closing?.Invoke(this, e);
+        }
         internal void SelectAndPopup(bool activate = true)
         {
             if (this.Parent is WindowGroup parent)
@@ -192,32 +272,38 @@ namespace Docker
         #region Properties
         public UIElement Child
         {
-            get => (UIElement)GetValue(ChildProperty);
-            set => SetValue(ChildProperty, value);
+            get => (UIElement)GetValue(DockWindow.ChildProperty);
+            set => SetValue(DockWindow.ChildProperty, value);
         }
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public bool IsSelected
         {
-            get => (bool)GetValue(IsSelectedProperty);
-            internal set => SetValue(IsSelectedProperty, value);
+            get => (bool)GetValue(DockWindow.IsSelectedProperty);
+            internal set => SetValue(DockWindow.IsSelectedProperty, value);
         }
         [Category("Text")]
         public string TabText
         {
-            get => (string)GetValue(TabTextProperty);
-            set => SetValue(TabTextProperty, value);
+            get => (string)GetValue(DockWindow.TabTextProperty);
+            set => SetValue(DockWindow.TabTextProperty, value);
         }
         [Category("Common Properties")]
         public string Title
         {
-            get => (string)GetValue(TitleProperty);
-            set => SetValue(TitleProperty, value);
+            get => (string)GetValue(DockWindow.TitleProperty);
+            set => SetValue(DockWindow.TitleProperty, value);
         }
         [Category("Docking")]
         public double ContentSize
         {
-            get => (double)GetValue(ContentSizeProperty);
-            set => SetValue(ContentSizeProperty, value);
+            get => (double)GetValue(DockWindow.ContentSizeProperty);
+            set => SetValue(DockWindow.ContentSizeProperty, value);
+        }
+        [Category("Docking")]
+        public bool AllowClose
+        {
+            get => (bool)GetValue(DockWindow.AllowCloseProperty);
+            set => SetValue(DockWindow.AllowCloseProperty, value);
         }
         #endregion
     }

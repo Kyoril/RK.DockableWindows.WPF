@@ -43,15 +43,15 @@
                     <docker:SplitContainer>
                         <docker:WindowGroup>
                             <docker:DockWindow Title="Solution Explorer">
-                                <TextBox></TextBox>
+                                
                             </docker:DockWindow>
                         </docker:WindowGroup>
                         <docker:WindowGroup>
                             <docker:DockWindow Title="Test">
-                                <TextBox></TextBox>
+                                
                             </docker:DockWindow>
                             <docker:DockWindow Title="Test 2">
-                                <TextBox></TextBox>
+                                
                             </docker:DockWindow>
                         </docker:WindowGroup>
                     </docker:SplitContainer>

@@ -162,6 +162,32 @@ namespace Docker
             }
             element.SetValue(SplitContainer.WorkingSizeProperty, size);
         }
+
+        internal void Remove()
+        {
+            // Check if this split container is in another split container
+            if (this.Parent is SplitContainer parent)
+            {
+                // It is, so remove it
+                parent.Children.Remove(this);
+
+                // And again, check if the parent split container now is empty and if so,
+                // remove it as well.
+                if (parent.Children.Count == 0)
+                {
+                    parent.Remove();
+                }
+            }
+            else
+            {
+                // Otherwise, check if this split container is part of a DockCanvas and remove it there
+                DockCanvas canvas = this.Parent as DockCanvas;
+                if ((canvas != null) && canvas.SplitContainers.Contains(this))
+                {
+                    canvas.SplitContainers.Remove(this);
+                }
+            }
+        }
         #endregion
 
 
