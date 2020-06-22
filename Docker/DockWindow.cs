@@ -1,17 +1,19 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Markup;
+using System.Windows.Media;
+using System.Windows.Threading;
 
 namespace Docker
 {
+    /// <summary>
+    /// A control that can be docked at any side the user want's to. This control contains the actual
+    /// child that the developer want's to be docked.
+    /// </summary>
     [ContentProperty("Child")]
     [DefaultProperty("Title")]
     public class DockWindow : Control
@@ -99,7 +101,7 @@ namespace Docker
 
 
         #region Internal Methods
-        internal void SelectAndPopup()
+        internal void SelectAndPopup(bool activate = true)
         {
             if (this.Parent is WindowGroup parent)
             {
@@ -108,6 +110,55 @@ namespace Docker
                     parent.SelectedWindow = this;
                     parent.UpdateLayout();
                 }
+            }
+
+            if (activate)
+            {
+                this.Activate();
+            }
+        }
+        internal bool Activate()
+        {
+            bool succeeded = false;
+
+            // Only do anything if the control isn't currently focused
+            if (!this.IsKeyboardFocusWithin)
+            {
+                // First find the focused element in this control
+                UIElement focusedElement = null;
+                if (FocusManager.GetIsFocusScope(this))
+                {
+                    focusedElement = FocusManager.GetFocusedElement(this) as UIElement;
+                }
+
+                // If we found an element, try to focus it
+                if (focusedElement != null)
+                {
+                    succeeded = focusedElement.Focus();
+                }
+
+                // If this didn't succeed so far, try to activate the child element
+                if (!succeeded && (this.Child != null))
+                {
+                    succeeded = this.Child.MoveFocus(new TraversalRequest(FocusNavigationDirection.First));
+                }
+
+                // If this still didn't succeed, try to focus this control
+                if (!succeeded && base.Focusable)
+                {
+                    succeeded = base.Focus();
+                }
+            }
+
+            return succeeded;
+        }
+        private void ActivateIfNoFocus(object sender, EventArgs e)
+        {
+            // If this control is not currently focused...
+            if (!this.IsKeyboardFocusWithin)
+            {
+                // Activate
+                Activate();
             }
         }
         #endregion
@@ -123,6 +174,16 @@ namespace Docker
                     return new UIElement[] { Child }.GetEnumerator();
                 }
                 return null;
+            }
+        }
+
+        protected override void OnPreviewMouseDown(MouseButtonEventArgs e)
+        {
+            base.OnPreviewMouseDown(e);
+
+            if (e.ClickCount == 1)
+            {
+                Dispatcher.BeginInvoke(DispatcherPriority.Background, new EventHandler(ActivateIfNoFocus), null, null);
             }
         }
         #endregion
