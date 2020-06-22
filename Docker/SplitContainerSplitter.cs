@@ -1,7 +1,10 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace Docker
 {
@@ -11,6 +14,20 @@ namespace Docker
     /// </summary>
     public class SplitContainerSplitter : Thumb
     {
+        private sealed class ResizeData
+        {
+            public double maxOffset;
+            public double minOffset;
+            public double afterElementSize;
+            public SplitPreviewAdorner previewAdorner;
+            public SplitContainer parent;
+            public double beforeElementSize;
+        }
+
+
+        private ResizeData resizeData;
+
+
         #region Dependency Properties
         internal static readonly DependencyProperty SizeProperty = 
             DependencyProperty.Register(
@@ -64,7 +81,21 @@ namespace Docker
         #region Private Methods
         private void OnDragStarted(DragStartedEventArgs e)
         {
-            // TODO
+            if (this.VisualParent is SplitContainer splitContainer)
+            {
+                AdornerLayer adornerLayer = AdornerLayer.GetAdornerLayer(splitContainer);
+                if (adornerLayer != null)
+                {
+                    this.resizeData = new ResizeData();
+                    this.resizeData.parent = splitContainer;
+                    this.resizeData.beforeElementSize = (Orientation == Orientation.Horizontal) ? LayoutInformation.GetLayoutSlot(BeforeElement).Height : LayoutInformation.GetLayoutSlot(BeforeElement).Width;
+                    this.resizeData.afterElementSize = (Orientation == Orientation.Horizontal) ? LayoutInformation.GetLayoutSlot(AfterElement).Height : LayoutInformation.GetLayoutSlot(AfterElement).Width;
+                    this.resizeData.minOffset = resizeData.beforeElementSize - 22.0;
+                    this.resizeData.maxOffset = resizeData.afterElementSize - 22.0;
+                    this.resizeData.previewAdorner = new SplitPreviewAdorner(this, null);
+                    adornerLayer.Add(this.resizeData.previewAdorner);
+                }
+            }
         }
         private static void OnDragStarted(object sender, DragStartedEventArgs e)
         {
@@ -72,7 +103,17 @@ namespace Docker
         }
         private void OnDragDelta(DragDeltaEventArgs e)
         {
-            // TODO
+            if (this.resizeData != null)
+            {
+                if (Orientation == Orientation.Vertical)
+                {
+                    this.resizeData.previewAdorner.OffsetX = Math.Min(Math.Max(e.HorizontalChange, -this.resizeData.minOffset), this.resizeData.maxOffset);
+                }
+                else
+                {
+                    this.resizeData.previewAdorner.OffsetY = Math.Min(Math.Max(e.VerticalChange, -this.resizeData.minOffset), this.resizeData.maxOffset);
+                }
+            }
         }
         private static void OnDragDelta(object sender, DragDeltaEventArgs e)
         {
@@ -80,7 +121,38 @@ namespace Docker
         }
         private void OnDragCompleted(DragCompletedEventArgs e)
         {
-            // TODO
+            if (resizeData != null)
+            {
+                if (!e.Canceled)
+                {
+                    Size beforeElementSize = SplitContainer.GetWorkingSize(BeforeElement);
+                    Size afterElementSize = SplitContainer.GetWorkingSize(AfterElement);
+
+                    double totalElementSize = beforeElementSize.Height + afterElementSize.Height;
+                    double oritinalElementsTotalSize = this.resizeData.beforeElementSize + resizeData.afterElementSize;
+
+                    if (Orientation == Orientation.Horizontal)
+                    {
+                        double delta = resizeData.previewAdorner.OffsetY / oritinalElementsTotalSize * totalElementSize;
+                        SplitContainer.SetWorkingSize(BeforeElement, new Size(beforeElementSize.Width, beforeElementSize.Height + delta));
+                        SplitContainer.SetWorkingSize(AfterElement, new Size(afterElementSize.Width, afterElementSize.Height - delta));
+                    }
+                    else
+                    {
+                        double delta = this.resizeData.previewAdorner.OffsetX / oritinalElementsTotalSize * totalElementSize;
+                        SplitContainer.SetWorkingSize(BeforeElement, new Size(beforeElementSize.Width + delta, beforeElementSize.Height));
+                        SplitContainer.SetWorkingSize(AfterElement, new Size(afterElementSize.Width - delta, afterElementSize.Height));
+                    }
+                }
+
+
+                if (VisualTreeHelper.GetParent(this.resizeData.previewAdorner) is AdornerLayer adornerLayer)
+                {
+                    adornerLayer.Remove(this.resizeData.previewAdorner);
+                }
+
+                resizeData = null;
+            }
         }
         private static void OnDragCompleted(object sender, DragCompletedEventArgs e)
         {
