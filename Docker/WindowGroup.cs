@@ -155,15 +155,17 @@ namespace Docker
 
                 if ((parent.Children.Count == 1) && (parent.Parent is SplitContainer splitContainerParent))
                 {
+                    FrameworkElement child = parent.Children[0];
+
                     int parentIndex = splitContainerParent.Children.IndexOf(parent);
 
                     Size workingSize = SplitContainer.GetWorkingSize(parent);
-                    parent.Children.Remove(parent.Children[0]);
+                    parent.Children.Remove(child);
 
                     splitContainerParent.Children.RemoveAt(parentIndex);
-                    splitContainerParent.Children.Insert(parentIndex, parent.Children[0]);
+                    splitContainerParent.Children.Insert(parentIndex, child);
 
-                    SplitContainer.SetWorkingSize(parent.Children[0], workingSize);
+                    SplitContainer.SetWorkingSize(child, workingSize);
                     return;
                 }
 
