@@ -137,6 +137,15 @@ namespace Docker
         {
             this.hierarchyPresenter.InvalidateSplitters();
         }
+        internal void InternalAddLogicalChild(object child)
+        {
+            this.AddLogicalChild(child);
+        }
+        internal void InternalRemoveLogicalChild(object child)
+        {
+            this.RemoveLogicalChild(child);
+            this.hierarchyPresenter.InvalidateMeasure();
+        }
         #endregion
 
 

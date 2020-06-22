@@ -30,18 +30,28 @@ namespace Docker
             this.parent.InvalidateMeasure();
             this.parent.OnSplitContainersChanged();
         }
+        private void OnSplitContainerAdded(SplitContainer splitContainer)
+        {
+            this.parent.InternalAddLogicalChild(splitContainer);
+        }
+        private void OnSplitContainerRemoved(SplitContainer splitContainer)
+        {
+            this.parent.InternalRemoveLogicalChild(splitContainer);
+        }
         #endregion
 
 
         #region Public Methods
         public int Add(SplitContainer container)
         {
+            OnSplitContainerAdded(container);
             int result = this.collection.Add(container);
             this.InvalidateParent();
             return result;
         }
         public void Remove(SplitContainer container)
         {
+            OnSplitContainerRemoved(container);
             this.collection.Remove(container);
             this.InvalidateParent();
         }
@@ -55,6 +65,7 @@ namespace Docker
         }
         public void Insert(int index, SplitContainer container)
         {
+            OnSplitContainerAdded(container);
             this.collection.Insert(index, container);
             this.InvalidateParent();
         }
@@ -77,7 +88,7 @@ namespace Docker
         {
             foreach(SplitContainer container in this.collection)
             {
-                // TODO: Unregister container
+                OnSplitContainerRemoved(container);
             }
 
             this.collection.Clear();
@@ -101,6 +112,7 @@ namespace Docker
         }
         public void RemoveAt(int index)
         {
+            OnSplitContainerRemoved(this[index]);
             this.collection.RemoveAt(index);
             this.InvalidateParent();
         }

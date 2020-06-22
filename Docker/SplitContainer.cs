@@ -163,6 +163,11 @@ namespace Docker
             element.SetValue(SplitContainer.WorkingSizeProperty, size);
         }
 
+        protected override void OnVisualParentChanged(DependencyObject oldParent)
+        {
+            base.OnVisualParentChanged(oldParent);
+        }
+
         internal void Remove()
         {
             // Check if this split container is in another split container
