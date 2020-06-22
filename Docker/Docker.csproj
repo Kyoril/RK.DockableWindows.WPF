@@ -62,6 +62,9 @@
     <Compile Include="SplitContainerSplitter.cs" />
     <Compile Include="SplitPreviewAdorner.cs" />
     <Compile Include="WindowGroup.cs" />
+    <Compile Include="WindowList.cs" />
+    <Compile Include="WindowTab.cs" />
+    <Compile Include="WindowTabPanel.cs" />
     <Page Include="Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

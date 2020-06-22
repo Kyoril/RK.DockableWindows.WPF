@@ -24,6 +24,7 @@ namespace Docker
     /// completely changed).
     /// </summary>
     [TemplatePart(Name = "PART_TitleBar", Type = typeof(FrameworkElement))]
+    [TemplatePart(Name = "PART_WindowList", Type = typeof(WindowList))]
     [ContentProperty("Windows")]
     public class WindowGroup : Control
     {  

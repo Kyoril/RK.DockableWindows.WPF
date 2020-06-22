@@ -13,5 +13,8 @@ namespace Docker
         /// DockableWindow. A window group contains the title bar and the tab list below.
         /// </summary>
         WindowGroupTemplate,
+
+        DockableWindowTabTemplate,
+        DockableWindowGroupTemplate,
     }
 }

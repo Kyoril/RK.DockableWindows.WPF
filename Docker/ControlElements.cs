@@ -47,5 +47,9 @@ namespace Docker
         /// Style for a WindowGroup tab strip.
         /// </summary>
         WindowGroupTabStrip,
+
+        WindowTab,
+
+        WindowSelectedTab,
     }
 }
