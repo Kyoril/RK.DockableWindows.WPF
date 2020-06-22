@@ -8,6 +8,17 @@
         mc:Ignorable="d"
         Title="Docker Demo Application" Height="510" Width="800"
         ResizeMode="CanResizeWithGrip">
+    <Window.Resources>
+        <!-- TextBox styles inside DockWindows of this main window -->
+        <Style TargetType="{x:Type docker:DockWindow}">
+            <Style.Resources>
+                <Style TargetType="{x:Type TextBox}">
+                    <Setter Property="Background" Value="#F5F5F5" />
+                    <Setter Property="BorderThickness" Value="0" />
+                </Style>
+            </Style.Resources>
+        </Style>
+    </Window.Resources>
     <DockPanel>
         <!-- Main Menu of the application -->
         <Menu DockPanel.Dock="Top">
@@ -32,15 +43,15 @@
                     <docker:SplitContainer>
                         <docker:WindowGroup>
                             <docker:DockWindow Title="Solution Explorer">
-                                <TextBox BorderThickness="0"></TextBox>
+                                <TextBox></TextBox>
                             </docker:DockWindow>
                         </docker:WindowGroup>
                         <docker:WindowGroup>
                             <docker:DockWindow Title="Test">
-                                <TextBox BorderThickness="0"></TextBox>
+                                <TextBox></TextBox>
                             </docker:DockWindow>
                             <docker:DockWindow Title="Test 2">
-                                <TextBox BorderThickness="0"></TextBox>
+                                <TextBox></TextBox>
                             </docker:DockWindow>
                         </docker:WindowGroup>
                     </docker:SplitContainer>
@@ -50,11 +61,12 @@
                 <docker:SplitContainer>
                     <docker:WindowGroup>
                         <docker:DockWindow Title="Properties">
-                            
+
                         </docker:DockWindow>
                     </docker:WindowGroup>
                 </docker:SplitContainer>
 
+                <!-- Bottom dock container -->
                 <docker:SplitContainer docker:DockCanvas.Dock="Bottom">
                     <docker:WindowGroup>
                         <docker:DockWindow Title="Output">

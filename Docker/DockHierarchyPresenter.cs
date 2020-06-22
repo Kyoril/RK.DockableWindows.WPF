@@ -178,6 +178,9 @@ namespace Docker
                 Child.Arrange(final);
             }
 
+            // Update client bounds (needed for splitter preview)
+            this.ClientBounds = final;
+
             // The size isn't changed
             return finalSize;
         }
@@ -336,6 +339,7 @@ namespace Docker
                 }
             }
         }
+        public Rect ClientBounds { get; private set; }
         #endregion
     }
 }

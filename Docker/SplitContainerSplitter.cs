@@ -1,15 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 
 namespace Docker
 {
+    /// <summary>
+    /// A splitter control that is used by the SplitContainer control. These splitters allow
+    /// the user to resize WindowGroup controls inside a SplitContainer.
+    /// </summary>
     public class SplitContainerSplitter : Thumb
     {
         #region Dependency Properties
@@ -26,14 +25,25 @@ namespace Docker
 
 
         #region Construction
+        /// <summary>
+        /// Initializes static WPF settings.
+        /// </summary>
         static SplitContainerSplitter()
         {
+            // Allow custom styling
             Thumb.DefaultStyleKeyProperty.OverrideMetadata(typeof(SplitContainerSplitter), new FrameworkPropertyMetadata(typeof(SplitContainerSplitter)));
 
+            // Subscribe event handlers
             EventManager.RegisterClassHandler(typeof(SplitContainerSplitter), Thumb.DragStartedEvent, new DragStartedEventHandler(SplitContainerSplitter.OnDragStarted));
             EventManager.RegisterClassHandler(typeof(SplitContainerSplitter), Thumb.DragDeltaEvent, new DragDeltaEventHandler(SplitContainerSplitter.OnDragDelta));
             EventManager.RegisterClassHandler(typeof(SplitContainerSplitter), Thumb.DragCompletedEvent, new DragCompletedEventHandler(SplitContainerSplitter.OnDragCompleted));
         }
+        /// <summary>
+        /// Initializes a new instance of the SplitContainerSplitter class.
+        /// </summary>
+        /// <param name="beforeElement">The element before the splitter.</param>
+        /// <param name="afterElement">The element after the splitter.</param>
+        /// <param name="splitterOrientation">The splitter orientation.</param>
         internal SplitContainerSplitter(FrameworkElement beforeElement, FrameworkElement afterElement, Orientation splitterOrientation)
         {
             this.BeforeElement = beforeElement;
@@ -80,9 +90,21 @@ namespace Docker
 
 
         #region Properties
+        /// <summary>
+        /// Gets the element after the splitter (right / bottom side).
+        /// </summary>
         public FrameworkElement AfterElement { get; }
+        /// <summary>
+        /// Gets the element before the splitter (left / top side).
+        /// </summary>
         public FrameworkElement BeforeElement { get; }
+        /// <summary>
+        /// Gets the splitter orientation.
+        /// </summary>
         public Orientation Orientation { get; }
+        /// <summary>
+        /// Gets or sets the size of the splitter.
+        /// </summary>
         internal double Size
         {
             get => (double)GetValue(SplitContainerSplitter.SizeProperty);

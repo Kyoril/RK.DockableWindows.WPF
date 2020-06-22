@@ -233,6 +233,7 @@ namespace Docker
         /// A collection of all split containers of this canvas.
         /// </summary>
         public SplitContainerCollection SplitContainers { get; }
+        public Rect ClientBounds { get => new Rect(this.hierarchyPresenter.TransformToAncestor(this).Transform(this.hierarchyPresenter.ClientBounds.Location), this.hierarchyPresenter.ClientBounds.Size); }
         #endregion
     }
 }

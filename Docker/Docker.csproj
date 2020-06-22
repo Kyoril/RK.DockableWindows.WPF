@@ -60,6 +60,7 @@
     <Compile Include="SplitContainerContentCollection.cs" />
     <Compile Include="DockWindowCollection.cs" />
     <Compile Include="SplitContainerSplitter.cs" />
+    <Compile Include="SplitPreviewAdorner.cs" />
     <Compile Include="WindowGroup.cs" />
     <Page Include="Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>

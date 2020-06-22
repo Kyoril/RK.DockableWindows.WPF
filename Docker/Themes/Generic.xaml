@@ -176,13 +176,13 @@
             </Border>
             
             <!-- Content part -->
-            <Border Grid.Row="1">
+            <Border Grid.Row="1" SnapsToDevicePixels="True">
                 <Border.Style>
                     <Style>
                         <Setter Property="Control.BorderBrush" 
                                 Value="{DynamicResource {ComponentResourceKey ResourceId={x:Static local:ControlElements.DockControlBorderBrush},TypeInTargetAssembly={x:Type local:ControlElements}}}" />
                         <Setter Property="Control.BorderThickness" 
-                                Value="1,0,1,1" />
+                                Value="1,0,1.5,1" />
                     </Style>
                 </Border.Style>
                 <ContentPresenter Margin="{TemplateBinding Padding}" 
