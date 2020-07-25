@@ -170,10 +170,7 @@ namespace Docker
                 index++;
             }
 
-            if (Child != null)
-            {
-                Child.Arrange(final);
-            }
+            Child?.Arrange(final);
 
             // Update client bounds (needed for splitter preview)
             ClientBounds = final;
@@ -244,13 +241,10 @@ namespace Docker
                 index++;
             }
 
-            if (Child != null)
-            {
-                Child.Measure(
-                    new Size(
-                        Math.Max(availableSize.Width - size.Width, 0.0),
-                        Math.Max(availableSize.Height - size.Height, 0.0)));
-            }
+            Child?.Measure(
+                new Size(
+                    Math.Max(availableSize.Width - size.Width, 0.0),
+                    Math.Max(availableSize.Height - size.Height, 0.0)));
 
             return size;
         }
