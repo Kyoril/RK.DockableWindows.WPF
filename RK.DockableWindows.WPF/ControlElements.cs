@@ -1,4 +1,4 @@
-﻿namespace Docker
+﻿namespace RK.DockableWindows.WPF
 {
     /// <summary>
     /// Contains control element keys which are used for rendering styled control templates.

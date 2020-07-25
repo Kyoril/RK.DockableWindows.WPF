@@ -5,7 +5,7 @@ using System.Windows.Markup;
 using System.Windows.Media;
 using System.Windows.Shapes;
 
-namespace Docker
+namespace RK.DockableWindows.WPF
 {
     /// <summary>
     /// This class contains all dockable elements and wraps around them. Usually, you will

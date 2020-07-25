@@ -1,6 +1,6 @@
-﻿using Docker;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Windows.Controls;
+using RK.DockableWindows.WPF;
 
 namespace UnitTest
 {

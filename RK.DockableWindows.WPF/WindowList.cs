@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 
-namespace Docker
+namespace RK.DockableWindows.WPF
 {
     /// <summary>
     /// This class manages the DockWindows in a WindowGroup and presents them as tabs in the WindowGroup.

@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
+using RK.DockableWindows.WPF;
 
 namespace Demo
 {
@@ -23,12 +24,12 @@ namespace Demo
 
         private void DockWindow_Closed(object sender, RoutedEventArgs e)
         {
-            this.log.Add($"DockWindow \"{(sender as Docker.DockWindow)?.Title}\" was closed");
+            this.log.Add($"DockWindow \"{(sender as DockWindow)?.Title}\" was closed");
         }
 
         private void DockWindow_Closing(object sender, CancelEventArgs e)
         {
-            this.log.Add($"DockWindow \"{(sender as Docker.DockWindow)?.Title}\" will be closed...");
+            this.log.Add($"DockWindow \"{(sender as DockWindow)?.Title}\" will be closed...");
         }
     }
 }

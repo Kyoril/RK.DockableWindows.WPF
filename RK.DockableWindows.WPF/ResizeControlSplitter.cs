@@ -6,7 +6,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 
-namespace Docker
+namespace RK.DockableWindows.WPF
 {
     /// <summary>
     /// A splitter control that is used by DockHierarchyPresenter. These splitters allow the
