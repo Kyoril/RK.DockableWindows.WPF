@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -16,19 +13,19 @@ namespace Docker
     /// </summary>
     public class DockHierarchyPresenter : FrameworkElement
     {
-        private DockCanvas parent;
-        private List<ResizeControlSplitter> splitters;
+        private readonly DockCanvas parent;
+        private readonly List<ResizeControlSplitter> splitters;
         private bool splittersInvalid;
 
 
         #region Construction
         static DockHierarchyPresenter()
         {
-            DockHierarchyPresenter.ClipToBoundsProperty.OverrideMetadata(typeof(DockHierarchyPresenter), new FrameworkPropertyMetadata(true));
+            ClipToBoundsProperty.OverrideMetadata(typeof(DockHierarchyPresenter), new FrameworkPropertyMetadata(true));
         }
         public DockHierarchyPresenter(DockCanvas parent)
         {
-            this.splitters = new List<ResizeControlSplitter>();
+            splitters = new List<ResizeControlSplitter>();
             this.parent = parent ?? throw new ArgumentNullException(nameof(parent));
         }
         #endregion
@@ -37,21 +34,21 @@ namespace Docker
         #region Internal Methods
         private void RecreateSplitters()
         {
-            this.splittersInvalid = false;
+            splittersInvalid = false;
 
             // Remove all old splitter controls
-            foreach (ResizeControlSplitter splitter in this.splitters)
+            foreach (ResizeControlSplitter splitter in splitters)
             {
-                this.RemoveVisualChild(splitter);
+                RemoveVisualChild(splitter);
             }
 
             // Empty splitter list
-            this.splitters.Clear();
+            splitters.Clear();
 
             // Create splitters
-            foreach(SplitContainer container in this.parent.SplitContainers)
+            foreach (SplitContainer container in parent.SplitContainers)
             {
-                var splitter = new ResizeControlSplitter(this.parent, container);
+                var splitter = new ResizeControlSplitter(parent, container);
 
                 Binding binding = new Binding
                 {
@@ -62,13 +59,13 @@ namespace Docker
 
                 splitter.SetBinding(DockPanel.DockProperty, binding);
 
-                this.splitters.Add(splitter);
-                this.AddVisualChild(splitter);
+                splitters.Add(splitter);
+                AddVisualChild(splitter);
             }
         }
         internal void InvalidateSplitters()
         {
-            this.splittersInvalid = true;
+            splittersInvalid = true;
         }
         #endregion
 
@@ -78,58 +75,58 @@ namespace Docker
         {
             // Calculate the final rectangle
             Rect final = new Rect(
-                0.0, 
-                0.0, 
-                finalSize.Width, 
+                0.0,
+                0.0,
+                finalSize.Width,
                 finalSize.Height);
 
             int index = 0;
 
             // Iterate through the containers
-            foreach(SplitContainer container in this.parent.SplitContainers)
+            foreach (SplitContainer container in parent.SplitContainers)
             {
                 // Determine the dock side of each split container
                 Dock dockSide = DockCanvas.GetDock(container);
 
                 // Depending on the dock side, we need to arrange the container differently
-                switch(dockSide)
+                switch (dockSide)
                 {
                     case Dock.Left:
                         container.Arrange(
                             new Rect(
-                                final.X, 
-                                final.Y, 
-                                container.DesiredSize.Width, 
+                                final.X,
+                                final.Y,
+                                container.DesiredSize.Width,
                                 final.Height));
 
-                        this.splitters[index].Arrange(
+                        splitters[index].Arrange(
                             new Rect(
-                                final.X + container.DesiredSize.Width, 
-                                final.Y, 
-                                this.splitters[index].DesiredSize.Width, 
+                                final.X + container.DesiredSize.Width,
+                                final.Y,
+                                splitters[index].DesiredSize.Width,
                                 final.Height));
 
-                        final.X += container.DesiredSize.Width + this.splitters[index].DesiredSize.Width;
-                        final.Width -= container.DesiredSize.Width + this.splitters[index].DesiredSize.Width;
+                        final.X += container.DesiredSize.Width + splitters[index].DesiredSize.Width;
+                        final.Width -= container.DesiredSize.Width + splitters[index].DesiredSize.Width;
                         break;
 
                     case Dock.Top:
                         container.Arrange(
                             new Rect(
-                                final.X, 
-                                final.Y, 
-                                final.Width, 
+                                final.X,
+                                final.Y,
+                                final.Width,
                                 container.DesiredSize.Height));
 
-                        this.splitters[index].Arrange(
+                        splitters[index].Arrange(
                             new Rect(
-                                final.X, 
-                                final.Y + container.DesiredSize.Height, 
-                                final.Width, 
-                                this.splitters[index].DesiredSize.Height));
+                                final.X,
+                                final.Y + container.DesiredSize.Height,
+                                final.Width,
+                                splitters[index].DesiredSize.Height));
 
-                        final.Y += container.DesiredSize.Height + this.splitters[index].DesiredSize.Height;
-                        final.Height -= container.DesiredSize.Height + this.splitters[index].DesiredSize.Height;
+                        final.Y += container.DesiredSize.Height + splitters[index].DesiredSize.Height;
+                        final.Height -= container.DesiredSize.Height + splitters[index].DesiredSize.Height;
                         break;
 
                     case Dock.Right:
@@ -140,14 +137,14 @@ namespace Docker
                                 container.DesiredSize.Width,
                                 final.Height));
 
-                        this.splitters[index].Arrange(
+                        splitters[index].Arrange(
                             new Rect(
-                                final.Right - container.DesiredSize.Width - this.splitters[index].DesiredSize.Width,
+                                final.Right - container.DesiredSize.Width - splitters[index].DesiredSize.Width,
                                 final.Y,
-                                this.splitters[index].DesiredSize.Width,
+                                splitters[index].DesiredSize.Width,
                                 final.Height));
 
-                        final.Width -= container.DesiredSize.Width + this.splitters[index].DesiredSize.Width;
+                        final.Width -= container.DesiredSize.Width + splitters[index].DesiredSize.Width;
                         break;
 
                     case Dock.Bottom:
@@ -158,14 +155,14 @@ namespace Docker
                                 final.Width,
                                 container.DesiredSize.Height));
 
-                        this.splitters[index].Arrange(
+                        splitters[index].Arrange(
                             new Rect(
                                 final.X,
-                                final.Bottom - container.DesiredSize.Height - this.splitters[index].DesiredSize.Height,
+                                final.Bottom - container.DesiredSize.Height - splitters[index].DesiredSize.Height,
                                 final.Width,
-                                this.splitters[index].DesiredSize.Height));
+                                splitters[index].DesiredSize.Height));
 
-                        final.Height -= container.DesiredSize.Height + this.splitters[index].DesiredSize.Height;
+                        final.Height -= container.DesiredSize.Height + splitters[index].DesiredSize.Height;
                         break;
                 }
 
@@ -179,7 +176,7 @@ namespace Docker
             }
 
             // Update client bounds (needed for splitter preview)
-            this.ClientBounds = final;
+            ClientBounds = final;
 
             // The size isn't changed
             return finalSize;
@@ -189,15 +186,15 @@ namespace Docker
             // This is the size that is taken by the split containers
             Size size = new Size(0.0, 0.0);
 
-            if (this.splittersInvalid)
+            if (splittersInvalid)
             {
-                this.RecreateSplitters();
+                RecreateSplitters();
             }
 
             int index = 0;
 
             // Iterate through all split containers
-            foreach (SplitContainer container in this.parent.SplitContainers)
+            foreach (SplitContainer container in parent.SplitContainers)
             {
                 // Get the dock side
                 Dock dockSide = DockCanvas.GetDock(container);
@@ -212,7 +209,7 @@ namespace Docker
                 double splitterSize = 0.0f;
 
                 // Depending on the dock side, we change the size accordingly
-                switch(dockSide)
+                switch (dockSide)
                 {
                     case Dock.Top:
                     case Dock.Bottom:
@@ -225,7 +222,7 @@ namespace Docker
                 }
 
                 available = new Size(
-                    Math.Max(availableSize.Width - size.Width, 0.0), 
+                    Math.Max(availableSize.Width - size.Width, 0.0),
                     Math.Max(availableSize.Height - size.Height, 0.0));
                 splitters[index].Measure(available);
 
@@ -235,11 +232,11 @@ namespace Docker
                     {
                         case Dock.Top:
                         case Dock.Bottom:
-                            size.Height += this.splitters[index].DesiredSize.Height;
+                            size.Height += splitters[index].DesiredSize.Height;
                             break;
                         case Dock.Left:
                         case Dock.Right:
-                            size.Width += this.splitters[index].DesiredSize.Width;
+                            size.Width += splitters[index].DesiredSize.Width;
                             break;
                     }
                 }
@@ -259,36 +256,34 @@ namespace Docker
         }
         protected override Visual GetVisualChild(int index)
         {
-            if (this.splittersInvalid)
+            if (splittersInvalid)
             {
-                this.RecreateSplitters();
+                RecreateSplitters();
             }
 
             // The first elements are the split containers of the DockCanvas
-            if (index < this.parent.SplitContainers.Count)
+            if (index < parent.SplitContainers.Count)
             {
-                return this.parent.SplitContainers[index];
+                return parent.SplitContainers[index];
             }
 
             // Reduce the index to check if the child is requested
-            index -= this.parent.SplitContainers.Count;
+            index -= parent.SplitContainers.Count;
 
             // Map index to splitters next
-            if (index < this.splitters.Count)
+            if (index < splitters.Count)
             {
-                return this.splitters[index];
+                return splitters[index];
             }
 
             // Map index to child now
-            index -= this.splitters.Count;
-            if (this.Child != null)
+            index -= splitters.Count;
+            if (Child != null)
             {
                 if (index == 0)
                 {
-                    return this.Child;
+                    return Child;
                 }
-
-                index--;
             }
 
             throw new ArgumentOutOfRangeException(nameof(index));
@@ -297,15 +292,15 @@ namespace Docker
         {
             get
             {
-                if (this.splittersInvalid)
+                if (splittersInvalid)
                 {
-                    this.RecreateSplitters();
+                    RecreateSplitters();
                 }
 
-                int count = this.parent.SplitContainers.Count + this.splitters.Count;
+                int count = parent.SplitContainers.Count + splitters.Count;
 
                 // Add child window
-                if (this.Child != null)
+                if (Child != null)
                 {
                     count++;
                 }
@@ -320,21 +315,21 @@ namespace Docker
         private UIElement child;
         internal UIElement Child
         {
-            get => this.child;
+            get => child;
             set
             {
-                if (value != this.child)
+                if (value != child)
                 {
-                    if (this.child != null)
+                    if (child != null)
                     {
-                        this.RemoveVisualChild(this.child);
+                        RemoveVisualChild(child);
                     }
 
-                    this.child = value;
+                    child = value;
 
-                    if (this.child != null)
+                    if (child != null)
                     {
-                        this.AddVisualChild(this.child);
+                        AddVisualChild(child);
                     }
                 }
             }

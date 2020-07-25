@@ -14,15 +14,18 @@ namespace Docker
             // Child elements will be WindowTab elements instead of DockWindow
             return new WindowTab();
         }
+
         protected override void ClearContainerForItemOverride(DependencyObject element, object item)
         {
             WindowTab tab = (WindowTab)element;
             tab.Window = null;
         }
+
         protected override bool IsItemItsOwnContainerOverride(object item)
         {
             return item is WindowTab;
         }
+
         protected override void PrepareContainerForItemOverride(DependencyObject element, object item)
         {
             WindowTab tab = (WindowTab)element;

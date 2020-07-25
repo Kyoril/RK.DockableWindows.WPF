@@ -13,20 +13,20 @@ namespace Docker
     public class WindowTab : Control
     {
         #region Dependency Properties
-        public static readonly DependencyProperty WindowProperty = 
+        public static readonly DependencyProperty WindowProperty =
             DependencyProperty.Register(
-                "Window", 
+                "Window",
                 typeof(DockWindow),
-                typeof(WindowTab), 
-                new FrameworkPropertyMetadata(null, new PropertyChangedCallback(WindowTab.OnWindowChanged)));
+                typeof(WindowTab),
+                new FrameworkPropertyMetadata(null, OnWindowChanged));
         #endregion
 
 
         #region Construction
         static WindowTab()
         {
-            WindowTab.DefaultStyleKeyProperty.OverrideMetadata(typeof(WindowTab), new FrameworkPropertyMetadata(typeof(WindowTab)));
-            WindowTab.FocusableProperty.OverrideMetadata(typeof(WindowTab), new FrameworkPropertyMetadata(false));
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(WindowTab), new FrameworkPropertyMetadata(typeof(WindowTab)));
+            FocusableProperty.OverrideMetadata(typeof(WindowTab), new FrameworkPropertyMetadata(false));
         }
         #endregion
 
@@ -40,21 +40,22 @@ namespace Docker
 
             if (oldValue != null)
             {
-                TypeDescriptor.GetProperties(oldValue)["IsSelected"].RemoveValueChanged(oldValue, new EventHandler(tab.OnIsSelectedChanged));
+                TypeDescriptor.GetProperties(oldValue)["IsSelected"].RemoveValueChanged(oldValue, tab.OnIsSelectedChanged);
             }
             if (newValue != null)
             {
-                TypeDescriptor.GetProperties(newValue)["IsSelected"].AddValueChanged(newValue, new EventHandler(tab.OnIsSelectedChanged));
+                TypeDescriptor.GetProperties(newValue)["IsSelected"].AddValueChanged(newValue, tab.OnIsSelectedChanged);
             }
         }
 
         private void OnIsSelectedChanged(object sender, EventArgs e)
         {
-            this.UpdateZIndex();
+            UpdateZIndex();
         }
+
         internal void UpdateZIndex()
         {
-            if ((this.Window != null) && this.Window.IsSelected)
+            if (Window != null && Window.IsSelected)
             {
                 Panel.SetZIndex(this, 9000);
             }
@@ -73,19 +74,14 @@ namespace Docker
             e.Handled = true;
 
             // Activate the window
-            if (this.Window != null)
-            {
-                Window.SelectAndPopup();
-            }
+            Window?.SelectAndPopup();
         }
+
         protected override void OnMouseRightButtonDown(MouseButtonEventArgs e)
         {
             e.Handled = true;
 
-            if (this.Window != null)
-            {
-                this.Window.SelectAndPopup();
-            }
+            Window?.SelectAndPopup();
         }
         #endregion
 
@@ -93,8 +89,8 @@ namespace Docker
         #region Properties
         public DockWindow Window
         {
-            get => (DockWindow)GetValue(WindowTab.WindowProperty);
-            set => SetValue(WindowTab.WindowProperty, value);
+            get => (DockWindow)GetValue(WindowProperty);
+            set => SetValue(WindowProperty, value);
         }
         #endregion
     }

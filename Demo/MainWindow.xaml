@@ -7,18 +7,8 @@
         xmlns:docker="clr-namespace:Docker;assembly=Docker"
         mc:Ignorable="d"
         Title="Docker Demo Application" Height="510" Width="800"
-        ResizeMode="CanResizeWithGrip">
-    <Window.Resources>
-        <!-- TextBox styles inside DockWindows of this main window -->
-        <Style TargetType="{x:Type docker:DockWindow}">
-            <Style.Resources>
-                <Style TargetType="{x:Type TextBox}">
-                    <Setter Property="Background" Value="#F5F5F5" />
-                    <Setter Property="BorderThickness" Value="0" />
-                </Style>
-            </Style.Resources>
-        </Style>
-    </Window.Resources>
+        ResizeMode="CanResizeWithGrip"
+        Loaded="Window_Loaded">
     <DockPanel>
         <!-- Main Menu of the application -->
         <Menu DockPanel.Dock="Top">
@@ -42,15 +32,15 @@
                 <docker:SplitContainer docker:DockCanvas.Dock="Left">
                     <docker:SplitContainer>
                         <docker:WindowGroup>
-                            <docker:DockWindow Title="Solution Explorer">
+                            <docker:DockWindow Title="Solution Explorer" x:Name="solutionExplorerWindow" Closing="DockWindow_Closing" Closed="DockWindow_Closed">
                                 
                             </docker:DockWindow>
                         </docker:WindowGroup>
                         <docker:WindowGroup>
-                            <docker:DockWindow Title="Test">
+                            <docker:DockWindow Title="Test" x:Name="testWindow" Closing="DockWindow_Closing" Closed="DockWindow_Closed">
                                 
                             </docker:DockWindow>
-                            <docker:DockWindow Title="Test 2">
+                            <docker:DockWindow Title="Test 2" x:Name="testWindow2" Closing="DockWindow_Closing" Closed="DockWindow_Closed">
                                 
                             </docker:DockWindow>
                         </docker:WindowGroup>
@@ -60,7 +50,7 @@
                 <!-- Right dock side -->
                 <docker:SplitContainer>
                     <docker:WindowGroup>
-                        <docker:DockWindow Title="Properties">
+                        <docker:DockWindow Title="Properties" x:Name="propertiesWindow" Closing="DockWindow_Closing" Closed="DockWindow_Closed">
 
                         </docker:DockWindow>
                     </docker:WindowGroup>
@@ -69,8 +59,10 @@
                 <!-- Bottom dock container -->
                 <docker:SplitContainer docker:DockCanvas.Dock="Bottom">
                     <docker:WindowGroup>
-                        <docker:DockWindow Title="Output">
-                            <TextBox BorderThickness="0"/>
+                        <docker:DockWindow Title="Output" x:Name="outputWindow" Closing="DockWindow_Closing" Closed="DockWindow_Closed">
+                            <ListView BorderThickness="0" Background="Transparent" x:Name="logList">
+                                
+                            </ListView>
                         </docker:DockWindow>
                     </docker:WindowGroup>
                 </docker:SplitContainer>

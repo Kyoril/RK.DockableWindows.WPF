@@ -1,20 +1,10 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Markup;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Docker
 {
@@ -40,20 +30,21 @@ namespace Docker
 
 
         #region Dependency Properties
-        public static readonly DependencyProperty SelectedWindowProperty = 
+
+        public static readonly DependencyProperty SelectedWindowProperty =
             DependencyProperty.Register(
-                "SelectedWindow", 
-                typeof(DockWindow), 
-                typeof(WindowGroup), 
-                new FrameworkPropertyMetadata(
-                    new PropertyChangedCallback(
-                        WindowGroup.OnSelectedWindowChanged)));
-        private static readonly DependencyPropertyKey HasMultipleWindowsPropertyKey = 
+                "SelectedWindow",
+                typeof(DockWindow),
+                typeof(WindowGroup),
+                new FrameworkPropertyMetadata(OnSelectedWindowChanged));
+
+        private static readonly DependencyPropertyKey HasMultipleWindowsPropertyKey =
             DependencyProperty.RegisterReadOnly(
-                "HasMultipleWindows", 
-                typeof(bool), 
-                typeof(WindowGroup), 
+                "HasMultipleWindows",
+                typeof(bool),
+                typeof(WindowGroup),
                 new FrameworkPropertyMetadata(false));
+
         public static readonly DependencyProperty HasMultipleWindowsProperty = HasMultipleWindowsPropertyKey.DependencyProperty;
         #endregion
 
@@ -84,29 +75,31 @@ namespace Docker
             // Prevent the WindowGroup control from being focused
             FocusableProperty.OverrideMetadata(typeof(WindowGroup), new FrameworkPropertyMetadata(false));
         }
+
         public WindowGroup()
         {
             this.Windows = new DockWindowCollection(this);
         }
         #endregion
 
-        
+
         #region Control overrides
-        protected override IEnumerator LogicalChildren => this.Windows.GetEnumerator();
+        protected override IEnumerator LogicalChildren => Windows.GetEnumerator();
+
         public override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
 
             if (titleBar != null)
             {
-                titleBar.PreviewMouseDown -= new MouseButtonEventHandler(this.OnTitleBarPreviewMouseDown);
+                titleBar.PreviewMouseDown -= OnTitleBarPreviewMouseDown;
             }
 
-            titleBar = base.GetTemplateChild("PART_TitleBar") as FrameworkElement;
+            titleBar = GetTemplateChild("PART_TitleBar") as FrameworkElement;
 
             if (titleBar != null)
             {
-                titleBar.PreviewMouseDown += new MouseButtonEventHandler(this.OnTitleBarPreviewMouseDown);
+                titleBar.PreviewMouseDown += OnTitleBarPreviewMouseDown;
             }
         }
         #endregion
@@ -115,45 +108,48 @@ namespace Docker
         #region Internal methods
         internal void AddLogicalChildInternal(DockWindow window)
         {
-            this.AddLogicalChild(window);
+            AddLogicalChild(window);
         }
+
         internal void RemoveLogicalChildInternal(DockWindow window)
         {
-            this.RemoveLogicalChild(window);
+            RemoveLogicalChild(window);
         }
+
         internal void OnChildrenChanged()
         {
             // Mark the first available window the selected one if there isn't any already and
             // if there are windows available at all
-            if ((this.SelectedWindow == null) && (this.Windows.Count != 0))
+            if (SelectedWindow == null && Windows.Count != 0)
             {
-                this.SelectedWindow = this.Windows[0];
+                SelectedWindow = Windows[0];
             }
 
             // If there is a selected window, but it isn't registered as a child window of this group,
             // try to find a new selected window (or reset to null).
-            if ((this.SelectedWindow != null) && !this.Windows.Contains(this.SelectedWindow))
+            if (SelectedWindow != null && !Windows.Contains(SelectedWindow))
             {
-                if (this.Windows.Count != 0)
+                if (Windows.Count != 0)
                 {
-                    this.SelectedWindow = this.Windows[0];
+                    SelectedWindow = Windows[0];
                 }
                 else
                 {
-                    this.SelectedWindow = null;
+                    SelectedWindow = null;
                 }
             }
-            
+
             // Eventually update the tab bar visibility
-            this.HasMultipleWindows = this.Windows.Count > 1;
+            HasMultipleWindows = Windows.Count > 1;
         }
+
         internal void Remove()
         {
-            if (this.Parent is SplitContainer parent)
+            if (Parent is SplitContainer parent)
             {
                 parent.Children.Remove(this);
 
-                if ((parent.Children.Count == 1) && (parent.Parent is SplitContainer splitContainerParent))
+                if (parent.Children.Count == 1 && parent.Parent is SplitContainer splitContainerParent)
                 {
                     FrameworkElement child = parent.Children[0];
 
@@ -176,17 +172,15 @@ namespace Docker
                 }
             }
 
-            if (this.Parent != null)
+            if (Parent != null)
             {
                 throw new InvalidOperationException();
             }
         }
+
         private void OnTitleBarPreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (this.SelectedWindow != null)
-            {
-                this.SelectedWindow.SelectAndPopup(true);
-            }
+            SelectedWindow?.SelectAndPopup(true);
         }
         #endregion
 
@@ -194,12 +188,14 @@ namespace Docker
         #region Properties
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
         public DockWindowCollection Windows { get; }
+
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public DockWindow SelectedWindow
         {
-            get => (DockWindow)base.GetValue(SelectedWindowProperty);
-            set => base.SetValue(SelectedWindowProperty, value);
+            get => (DockWindow)GetValue(SelectedWindowProperty);
+            set => SetValue(SelectedWindowProperty, value);
         }
+
         /// <summary>
         /// This property is used to toggle the visibility of the tab bar beneath the window group.
         /// If there is only a single window available in the group, we might not want to show a tab
@@ -207,14 +203,8 @@ namespace Docker
         /// </summary>
         public bool HasMultipleWindows
         {
-            get
-            {
-                return (bool)base.GetValue(HasMultipleWindowsProperty);
-            }
-            private set
-            {
-                base.SetValue(HasMultipleWindowsPropertyKey, value);
-            }
+            get => (bool)GetValue(HasMultipleWindowsProperty);
+            private set => SetValue(HasMultipleWindowsPropertyKey, value);
         }
         #endregion
     }

@@ -9,17 +9,17 @@ namespace Docker
     /// the DockCanvas class to contain all SplitContainers and allow them to be set up properly 
     /// using Xaml.
     /// </summary>
-    public class SplitContainerCollection : ICollection, IList
+    public class SplitContainerCollection : IList
     {
         private readonly DockCanvas parent;
-        private VisualCollection collection;
+        private readonly VisualCollection collection;
 
 
         #region Construction
         public SplitContainerCollection(DockCanvas parent, Visual visualParent)
         {
             this.parent = parent;
-            this.collection = new VisualCollection(visualParent);
+            collection = new VisualCollection(visualParent);
         }
         #endregion
 
@@ -27,16 +27,18 @@ namespace Docker
         #region Internal methods
         private void InvalidateParent()
         {
-            this.parent.InvalidateMeasure();
-            this.parent.OnSplitContainersChanged();
+            parent.InvalidateMeasure();
+            parent.OnSplitContainersChanged();
         }
+
         private void OnSplitContainerAdded(SplitContainer splitContainer)
         {
-            this.parent.InternalAddLogicalChild(splitContainer);
+            parent.InternalAddLogicalChild(splitContainer);
         }
+
         private void OnSplitContainerRemoved(SplitContainer splitContainer)
         {
-            this.parent.InternalRemoveLogicalChild(splitContainer);
+            parent.InternalRemoveLogicalChild(splitContainer);
         }
         #endregion
 
@@ -45,33 +47,40 @@ namespace Docker
         public int Add(SplitContainer container)
         {
             OnSplitContainerAdded(container);
-            int result = this.collection.Add(container);
-            this.InvalidateParent();
+
+            int result = collection.Add(container);
+            InvalidateParent();
+
             return result;
         }
         public void Remove(SplitContainer container)
         {
             OnSplitContainerRemoved(container);
-            this.collection.Remove(container);
-            this.InvalidateParent();
+            collection.Remove(container);
+            InvalidateParent();
         }
+
         public bool Contains(SplitContainer container)
         {
-            return this.collection.Contains(container);
+            return collection.Contains(container);
         }
+
         public int IndexOf(SplitContainer container)
         {
-            return this.collection.IndexOf(container);
+            return collection.IndexOf(container);
         }
+
         public void Insert(int index, SplitContainer container)
         {
             OnSplitContainerAdded(container);
-            this.collection.Insert(index, container);
-            this.InvalidateParent();
+
+            collection.Insert(index, container);
+            InvalidateParent();
         }
+
         public SplitContainer this[int index]
         {
-            get => this.collection[index] as SplitContainer;
+            get => collection[index] as SplitContainer;
             set => throw new NotImplementedException();
         }
         #endregion
@@ -79,43 +88,54 @@ namespace Docker
 
         #region IList implementation
         public bool IsReadOnly => false;
+
         public bool IsFixedSize => false;
+
         public int Add(object value)
         {
-            return this.Add(value as SplitContainer);
+            return Add(value as SplitContainer);
         }
+
         public void Clear()
         {
-            foreach(SplitContainer container in this.collection)
+            foreach (var visual in collection)
             {
+                var container = (SplitContainer)visual;
                 OnSplitContainerRemoved(container);
             }
 
-            this.collection.Clear();
-            this.InvalidateParent();
+            collection.Clear();
+            InvalidateParent();
         }
+
         public bool Contains(object value)
         {
-            return this.Contains(value as SplitContainer);
+            return Contains(value as SplitContainer);
         }
+
         public int IndexOf(object value)
         {
-            return this.IndexOf(value as SplitContainer);
+            return IndexOf(value as SplitContainer);
         }
+
         public void Insert(int index, object value)
         {
-            this.Insert(index, value as SplitContainer);
+            Insert(index, value as SplitContainer);
         }
+
         public void Remove(object value)
         {
-            this.Remove(value as SplitContainer);
+            Remove(value as SplitContainer);
         }
+
         public void RemoveAt(int index)
         {
             OnSplitContainerRemoved(this[index]);
-            this.collection.RemoveAt(index);
-            this.InvalidateParent();
+
+            collection.RemoveAt(index);
+            InvalidateParent();
         }
+
         object IList.this[int index]
         {
             get => this[index];
@@ -125,11 +145,15 @@ namespace Docker
 
 
         #region ICollection implementation
-        public int Count => this.collection.Count;
-        public object SyncRoot => this.collection.SyncRoot;
-        public bool IsSynchronized => this.collection.IsSynchronized;
-        public void CopyTo(Array array, int index) => this.collection.CopyTo(array, index);
-        public IEnumerator GetEnumerator() => this.collection.GetEnumerator();
+        public int Count => collection.Count;
+
+        public object SyncRoot => collection.SyncRoot;
+
+        public bool IsSynchronized => collection.IsSynchronized;
+
+        public void CopyTo(Array array, int index) => collection.CopyTo(array, index);
+
+        public IEnumerator GetEnumerator() => collection.GetEnumerator();
         #endregion
     }
 }

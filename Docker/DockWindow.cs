@@ -5,7 +5,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Markup;
-using System.Windows.Media;
 using System.Windows.Threading;
 
 namespace Docker
@@ -23,8 +22,23 @@ namespace Docker
         #endregion
 
 
+        #region Routed Events
+        public static readonly RoutedEvent ClosedEvent =
+            EventManager.RegisterRoutedEvent(
+                "Closed",
+                RoutingStrategy.Bubble,
+                typeof(RoutedEventHandler),
+                typeof(DockWindow));
+        #endregion
+
+
+
         #region Events
-        public event EventHandler Closed;
+        public event RoutedEventHandler Closed
+        {
+            add { AddHandler(ClosedEvent, value); }
+            remove { RemoveHandler(ClosedEvent, value); }
+        }
         public event CancelEventHandler Closing;
         #endregion
 
@@ -64,11 +78,11 @@ namespace Docker
                 typeof(DockWindow),
                 new FrameworkPropertyMetadata(225.0),
                 new ValidateValueCallback((o) => (double)o > 0.0));
-        public static readonly DependencyProperty AllowCloseProperty = 
+        public static readonly DependencyProperty AllowCloseProperty =
             DependencyProperty.Register(
-                "AllowClose", 
+                "AllowClose",
                 typeof(bool),
-                typeof(DockWindow), 
+                typeof(DockWindow),
                 new FrameworkPropertyMetadata(true));
         #endregion
 
@@ -82,9 +96,8 @@ namespace Docker
             KeyboardNavigation.TabNavigationProperty.OverrideMetadata(typeof(DockWindow), new FrameworkPropertyMetadata(KeyboardNavigationMode.Cycle));
 
             CommandManager.RegisterClassCommandBinding(
-                typeof(DockWindow), 
-                new CommandBinding(DockWindow.CloseCommand, new ExecutedRoutedEventHandler(DockWindow.OnCommand),
-                new CanExecuteRoutedEventHandler(DockWindow.OnCanExecute)));
+                typeof(DockWindow),
+                new CommandBinding(CloseCommand, OnCommand, OnCanExecute));
         }
         #endregion
 
@@ -107,7 +120,7 @@ namespace Docker
             }
 
             // Remove the DockWindow
-            if (this.Parent is WindowGroup parent)
+            if (Parent is WindowGroup parent)
             {
                 parent.Windows.Remove(this);
                 if (parent.Windows.Count == 0)
@@ -117,8 +130,8 @@ namespace Docker
             }
 
             // Raise the closed event in case the developer want's to react to it.
-            OnClosed(EventArgs.Empty);
-            
+            OnClosed();
+
             return true;
         }
         #endregion
@@ -160,30 +173,35 @@ namespace Docker
         private static void OnCommand(object sender, ExecutedRoutedEventArgs e)
         {
             DockWindow window = (DockWindow)sender;
-            if (e.Command == DockWindow.CloseCommand)
+            if (e.Command == CloseCommand)
             {
                 window.Close();
             }
         }
+
         private static void OnCanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             DockWindow window = (DockWindow)sender;
-            if (e.Command == DockWindow.CloseCommand)
+            if (e.Command == CloseCommand)
             {
                 e.CanExecute = window.AllowClose;
             }
         }
-        protected internal void OnClosed(EventArgs e)
+
+        protected internal void OnClosed()
         {
-            this.Closed?.Invoke(this, e);
+            RoutedEventArgs args = new RoutedEventArgs(ClosedEvent);
+            RaiseEvent(args);
         }
+
         protected internal void OnClosing(CancelEventArgs e)
         {
-            this.Closing?.Invoke(this, e);
+            Closing?.Invoke(this, e);
         }
+
         internal void SelectAndPopup(bool activate = true)
         {
-            if (this.Parent is WindowGroup parent)
+            if (Parent is WindowGroup parent)
             {
                 if (parent.SelectedWindow != this)
                 {
@@ -194,15 +212,16 @@ namespace Docker
 
             if (activate)
             {
-                this.Activate();
+                Activate();
             }
         }
+
         internal bool Activate()
         {
             bool succeeded = false;
 
             // Only do anything if the control isn't currently focused
-            if (!this.IsKeyboardFocusWithin)
+            if (!IsKeyboardFocusWithin)
             {
                 // First find the focused element in this control
                 UIElement focusedElement = null;
@@ -218,15 +237,15 @@ namespace Docker
                 }
 
                 // If this didn't succeed so far, try to activate the child element
-                if (!succeeded && (this.Child != null))
+                if (!succeeded && (Child != null))
                 {
-                    succeeded = this.Child.MoveFocus(new TraversalRequest(FocusNavigationDirection.First));
+                    succeeded = Child.MoveFocus(new TraversalRequest(FocusNavigationDirection.First));
                 }
 
                 // If this still didn't succeed, try to focus this control
-                if (!succeeded && base.Focusable)
+                if (!succeeded && Focusable)
                 {
-                    succeeded = base.Focus();
+                    succeeded = Focus();
                 }
             }
 
@@ -235,7 +254,7 @@ namespace Docker
         private void ActivateIfNoFocus(object sender, EventArgs e)
         {
             // If this control is not currently focused...
-            if (!this.IsKeyboardFocusWithin)
+            if (!IsKeyboardFocusWithin)
             {
                 // Activate
                 Activate();
@@ -272,38 +291,38 @@ namespace Docker
         #region Properties
         public UIElement Child
         {
-            get => (UIElement)GetValue(DockWindow.ChildProperty);
-            set => SetValue(DockWindow.ChildProperty, value);
+            get => (UIElement)GetValue(ChildProperty);
+            set => SetValue(ChildProperty, value);
         }
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public bool IsSelected
         {
-            get => (bool)GetValue(DockWindow.IsSelectedProperty);
-            internal set => SetValue(DockWindow.IsSelectedProperty, value);
+            get => (bool)GetValue(IsSelectedProperty);
+            internal set => SetValue(IsSelectedProperty, value);
         }
         [Category("Text")]
         public string TabText
         {
-            get => (string)GetValue(DockWindow.TabTextProperty);
-            set => SetValue(DockWindow.TabTextProperty, value);
+            get => (string)GetValue(TabTextProperty);
+            set => SetValue(TabTextProperty, value);
         }
         [Category("Common Properties")]
         public string Title
         {
-            get => (string)GetValue(DockWindow.TitleProperty);
-            set => SetValue(DockWindow.TitleProperty, value);
+            get => (string)GetValue(TitleProperty);
+            set => SetValue(TitleProperty, value);
         }
         [Category("Docking")]
         public double ContentSize
         {
-            get => (double)GetValue(DockWindow.ContentSizeProperty);
-            set => SetValue(DockWindow.ContentSizeProperty, value);
+            get => (double)GetValue(ContentSizeProperty);
+            set => SetValue(ContentSizeProperty, value);
         }
         [Category("Docking")]
         public bool AllowClose
         {
-            get => (bool)GetValue(DockWindow.AllowCloseProperty);
-            set => SetValue(DockWindow.AllowCloseProperty, value);
+            get => (bool)GetValue(AllowCloseProperty);
+            set => SetValue(AllowCloseProperty, value);
         }
         #endregion
     }

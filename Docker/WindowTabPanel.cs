@@ -10,11 +10,11 @@ namespace Docker
     public class WindowTabPanel : Panel
     {
         #region Dependency Properties
-        public static readonly DependencyProperty OrientationProperty = 
+        public static readonly DependencyProperty OrientationProperty =
             DependencyProperty.Register(
-                "Orientation", 
-                typeof(Orientation), 
-                typeof(WindowTabPanel), 
+                "Orientation",
+                typeof(Orientation),
+                typeof(WindowTabPanel),
                 new FrameworkPropertyMetadata(Orientation.Horizontal, FrameworkPropertyMetadataOptions.AffectsMeasure));
         #endregion
 
@@ -44,11 +44,12 @@ namespace Docker
 
             return new Size(finalSize.Width, finalSize.Height);
         }
+
         protected override Size MeasureOverride(Size availableSize)
         {
             // Gather tab text length
             int tabTextLength = 0;
-            foreach (WindowTab tab in this.Children)
+            foreach (WindowTab tab in Children)
             {
                 tabTextLength += Math.Max(GetWindowTabText(tab).Length, 1);
             }
@@ -95,12 +96,12 @@ namespace Docker
         }
         #endregion
 
-        
+
         #region Properties
         public Orientation Orientation
         {
-            get => (Orientation)GetValue(WindowTabPanel.OrientationProperty);
-            set => SetValue(WindowTabPanel.OrientationProperty, value);
+            get => (Orientation)GetValue(OrientationProperty);
+            set => SetValue(OrientationProperty, value);
         }
         #endregion
     }

@@ -8,26 +8,26 @@ namespace Docker
 {
     public class SplitPreviewAdorner : Adorner
     {
-        private Rectangle bar;
-        private TranslateTransform translation;
+        private readonly Rectangle bar;
+        private readonly TranslateTransform translation;
 
 
         #region Construction
         public SplitPreviewAdorner(UIElement element, Style style)
             : base(element)
         {
-            this.SnapsToDevicePixels = true;
+            SnapsToDevicePixels = true;
 
             SolidColorBrush brush = new SolidColorBrush(Colors.Black)
             {
                 Opacity = 0.4
             };
 
-            this.bar = new Rectangle();
-            this.bar.Fill = brush;
-            this.translation = new TranslateTransform();
-            this.bar.RenderTransform = this.translation;
-            this.AddVisualChild(bar);
+            bar = new Rectangle { Fill = brush };
+            translation = new TranslateTransform();
+            bar.RenderTransform = this.translation;
+
+            AddVisualChild(bar);
         }
         #endregion
 
@@ -37,6 +37,7 @@ namespace Docker
             bar.Arrange(new Rect(new Point(), finalSize));
             return finalSize;
         }
+
         protected override Visual GetVisualChild(int index)
         {
             if (index != 0)
@@ -46,7 +47,8 @@ namespace Docker
 
             return bar;
         }
-        protected override int VisualChildrenCount { get => 1; }
+
+        protected override int VisualChildrenCount => 1;
         #endregion
 
 
@@ -57,6 +59,7 @@ namespace Docker
             get => translation.X;
             set => translation.X = value;
         }
+
         public double OffsetY
         {
             get => translation.Y;

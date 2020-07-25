@@ -12,14 +12,14 @@ namespace Docker
     public class SplitContainerContentCollection : IList
     {
         private readonly SplitContainer parent;
-        private List<FrameworkElement> contentList;
+        private readonly List<FrameworkElement> contentList;
 
 
         #region Construction
         public SplitContainerContentCollection(SplitContainer parent)
         {
             this.parent = parent ?? throw new ArgumentNullException(nameof(parent));
-            this.contentList = new List<FrameworkElement>();
+            contentList = new List<FrameworkElement>();
         }
         #endregion
 
@@ -28,9 +28,10 @@ namespace Docker
         #region Public methods
         public int Add(FrameworkElement element)
         {
-            Insert(this.contentList.Count, element);
-            return this.contentList.Count - 1;
+            Insert(contentList.Count, element);
+            return contentList.Count - 1;
         }
+
         public void Insert(int index, FrameworkElement element)
         {
             VerifyElement(element);
@@ -39,30 +40,33 @@ namespace Docker
             OnChildrenChanging();
 
             // Insert element into child list
-            this.contentList.Insert(index, element);
+            contentList.Insert(index, element);
 
             // Add element as both logical and visual child
-            this.parent.AddLogicalChildInternal(element);
-            this.parent.AddVisualChildInternal(element);
+            parent.AddLogicalChildInternal(element);
+            parent.AddVisualChildInternal(element);
 
             // Change finished
             OnChildrenChanged();
         }
+
         public bool Contains(FrameworkElement element)
         {
-            return this.contentList.Contains(element);
+            return contentList.Contains(element);
         }
+
         public int IndexOf(FrameworkElement element)
         {
-            return this.contentList.IndexOf(element);
+            return contentList.IndexOf(element);
         }
+
         public void Remove(FrameworkElement element)
         {
             OnChildrenChanging();
 
-            this.parent.RemoveLogicalChildInternal(element);
-            this.parent.RemoveVisualChildInternal(element);
-            this.contentList.Remove(element);
+            parent.RemoveLogicalChildInternal(element);
+            parent.RemoveVisualChildInternal(element);
+            contentList.Remove(element);
 
             OnChildrenChanged();
         }
@@ -83,7 +87,7 @@ namespace Docker
             }
             if (!(element is SplitContainer) && !(element is WindowGroup))
             {
-                throw new ArgumentException("Only SplitContainer and WindowGroup elements are allowed to be children of a SplitContainer element!", nameof(element));
+                throw new ArgumentException(@"Only SplitContainer and WindowGroup elements are allowed to be children of a SplitContainer element!", nameof(element));
             }
         }
         #endregion
@@ -96,13 +100,14 @@ namespace Docker
         /// </summary>
         public int Capacity
         {
-            get => this.contentList.Capacity;
-            set => this.contentList.Capacity = value;
+            get => contentList.Capacity;
+            set => contentList.Capacity = value;
         }
+
         public FrameworkElement this[int index]
         {
-            get => this.contentList[index] as FrameworkElement;
-            set => this.contentList[index] = value;
+            get => contentList[index];
+            set => contentList[index] = value;
         }
         #endregion
 
@@ -114,12 +119,13 @@ namespace Docker
             // Although this is a one liner, behavior might change later on and the logic
             // behind this method is used quite often in this class. That's why this line
             // is encapsuled in a method.
-            this.parent.OnChildrenChanging();
+            parent.OnChildrenChanging();
         }
+
         private void OnChildrenChanged()
         {
             // Se OnChildrenChanging note on why this one liner is a separate method.
-            this.parent.OnChildrenChanged();
+            parent.OnChildrenChanged();
         }
         #endregion
 
@@ -130,52 +136,66 @@ namespace Docker
             get => this[index];
             set => this[index] = value as FrameworkElement;
         }
+
         public bool IsReadOnly => false;
+
         public bool IsFixedSize => false;
-        public int Count => this.contentList.Count;
+
+        public int Count => contentList.Count;
+
         public object SyncRoot => this;
+
         public bool IsSynchronized => false;
+
         public int Add(object value)
         {
-            return this.Add(value as FrameworkElement);
+            return Add(value as FrameworkElement);
         }
+
         public void Clear()
         {
             OnChildrenChanging();
 
             // Remove registered elements from the parent's visual and logical child list
             // before clearing the list.
-            foreach(FrameworkElement element in this.contentList)
+            foreach (FrameworkElement element in contentList)
             {
-                this.parent.RemoveLogicalChildInternal(element);
-                this.parent.RemoveVisualChildInternal(element);
+                parent.RemoveLogicalChildInternal(element);
+                parent.RemoveVisualChildInternal(element);
             }
 
-            this.contentList.Clear();
+            contentList.Clear();
 
             OnChildrenChanged();
         }
+
         public bool Contains(object value)
         {
-            return this.Contains(value as FrameworkElement);
+            return Contains(value as FrameworkElement);
         }
-        public void CopyTo(Array array, int index) => this.contentList.CopyTo((FrameworkElement[])array, index);
-        public IEnumerator GetEnumerator() => this.contentList.GetEnumerator();
+
+        public void CopyTo(Array array, int index) => contentList.CopyTo((FrameworkElement[])array, index);
+
+        public IEnumerator GetEnumerator() => contentList.GetEnumerator();
+
         public int IndexOf(object value)
         {
-            return this.IndexOf(value as FrameworkElement);
+            return IndexOf(value as FrameworkElement);
         }
+
         public void Insert(int index, object value)
         {
-            this.Insert(index, value as FrameworkElement);
+            Insert(index, value as FrameworkElement);
         }
+
         public void Remove(object value)
         {
-            this.Remove(value as FrameworkElement);
+            Remove(value as FrameworkElement);
         }
+
         public void RemoveAt(int index)
         {
-            Remove(this.contentList[index]);
+            Remove(contentList[index]);
         }
         #endregion
     }

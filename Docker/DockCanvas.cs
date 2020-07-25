@@ -14,35 +14,39 @@ namespace Docker
     [ContentProperty("Child")]
     public class DockCanvas : Control
     {
-        private Rectangle background;
-        private DockPanel layoutPanel;
-        private DockHierarchyPresenter hierarchyPresenter;
+        private readonly Rectangle background;
+        private readonly DockPanel layoutPanel;
+        private readonly DockHierarchyPresenter hierarchyPresenter;
 
 
         #region Dependency Properties
-        public static readonly DependencyProperty ContentSizeProperty = 
+
+        public static readonly DependencyProperty ContentSizeProperty =
             DependencyProperty.RegisterAttached(
-                "ContentSize", 
-                typeof(double), 
-                typeof(DockCanvas), 
+                "ContentSize",
+                typeof(double),
+                typeof(DockCanvas),
                 new FrameworkPropertyMetadata(
-                    200.0, 
-                    FrameworkPropertyMetadataOptions.AffectsMeasure, 
-                    new PropertyChangedCallback(DockCanvas.OnContentSizeChanged)), 
-                new ValidateValueCallback((o) => (double)o > 0.0));
+                    200.0,
+                    FrameworkPropertyMetadataOptions.AffectsMeasure,
+                    OnContentSizeChanged),
+                o => (double)o > 0.0);
+
         public static readonly DependencyProperty DockProperty =
             DependencyProperty.RegisterAttached(
-                "Dock", 
-                typeof(Dock), 
-                typeof(DockCanvas), 
+                "Dock",
+                typeof(Dock),
+                typeof(DockCanvas),
                 new FrameworkPropertyMetadata(
-                    Dock.Right, 
-                    FrameworkPropertyMetadataOptions.AffectsParentArrange, 
-                    new PropertyChangedCallback(DockCanvas.OnDockChanged)));
+                    Dock.Right,
+                    FrameworkPropertyMetadataOptions.AffectsParentArrange,
+                    OnDockChanged));
+
         #endregion
 
 
         #region DependencyProperty Callbacks
+
         /// <summary>
         /// Callback for a change of the Control's background property. If the property was changed, we want to update
         /// our background visual element.
@@ -51,65 +55,68 @@ namespace Docker
         /// <param name="e">Event arguments.</param>
         private static void OnBackgroundChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            (d as DockCanvas).background.Fill = (Brush)e.NewValue;
+            ((DockCanvas)d).background.Fill = (Brush)e.NewValue;
         }
+
         private static void OnContentSizeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             // TODO: Update dock hierarchy
         }
+
         private static void OnDockChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             // Update splitter orientation for split containers
-            if (d is SplitContainer element)
-            {
-                Dock newValue = (Dock)e.NewValue;
-                switch(newValue)
-                {
-                    case Dock.Left:
-                    case Dock.Right:
-                        element.ClearValue(SplitContainer.SplitterOrientationProperty);
-                        break;
-                    default:
-                        element.SetValue(SplitContainer.SplitterOrientationProperty, Orientation.Vertical);
-                        break;
-                }
-            }
+            if (!(d is SplitContainer element)) return;
+
+            var newValue = (Dock)e.NewValue;
+
+            if (newValue == Dock.Left || newValue == Dock.Right)
+                element.ClearValue(SplitContainer.SplitterOrientationProperty);
+            else
+                element.SetValue(SplitContainer.SplitterOrientationProperty, Orientation.Vertical);
         }
+
         #endregion
 
 
         #region Construction
+
         static DockCanvas()
         {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(DockCanvas), new FrameworkPropertyMetadata(typeof(DockCanvas)));
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(DockCanvas),
+                new FrameworkPropertyMetadata(typeof(DockCanvas)));
 
             // Watch for changes of the control's Background property.
-            BackgroundProperty.OverrideMetadata(typeof(DockCanvas), new FrameworkPropertyMetadata(BackgroundProperty.DefaultMetadata.DefaultValue, new PropertyChangedCallback(OnBackgroundChanged)));
+            BackgroundProperty.OverrideMetadata(typeof(DockCanvas),
+                new FrameworkPropertyMetadata(BackgroundProperty.DefaultMetadata.DefaultValue, OnBackgroundChanged));
         }
+
         public DockCanvas()
         {
             // Create the dock hierarchy presenter first
-            this.hierarchyPresenter = new DockHierarchyPresenter(this);
+            hierarchyPresenter = new DockHierarchyPresenter(this);
 
             // Setup split container collection. The visual parent will be the hierarchy presenter
             // so that the split containers will be displayed inside.
-            this.SplitContainers = new SplitContainerCollection(this, this.hierarchyPresenter);
+            SplitContainers = new SplitContainerCollection(this, hierarchyPresenter);
 
             // Create the background visual and add it
-            this.background = new Rectangle();
-            this.AddVisualChild(this.background);
+            background = new Rectangle();
+            AddVisualChild(background);
 
             // Create the layout panel which will host our actual content
-            this.layoutPanel = new DockPanel();
-            this.AddVisualChild(this.layoutPanel);
+            layoutPanel = new DockPanel();
+            AddVisualChild(layoutPanel);
 
-            // Create the dock hierachy presenter and add it to the layout panel.
-            this.layoutPanel.Children.Add(this.hierarchyPresenter);
+            // Create the dock hierarchy presenter and add it to the layout panel.
+            layoutPanel.Children.Add(hierarchyPresenter);
         }
+
         #endregion
 
 
         #region Methods
+
         [AttachedPropertyBrowsableForChildren]
         public static Dock GetDock(UIElement element)
         {
@@ -118,8 +125,9 @@ namespace Docker
                 throw new ArgumentNullException(nameof(element));
             }
 
-            return (Dock)element.GetValue(DockCanvas.DockProperty);
+            return (Dock)element.GetValue(DockProperty);
         }
+
         public static void SetDock(UIElement element, Dock dock)
         {
             if (element == null)
@@ -127,29 +135,35 @@ namespace Docker
                 throw new ArgumentNullException(nameof(element));
             }
 
-            element.SetValue(DockCanvas.DockProperty, dock);
+            element.SetValue(DockProperty, dock);
         }
+
         #endregion
 
 
         #region Internal methods
+
         internal void OnSplitContainersChanged()
         {
-            this.hierarchyPresenter.InvalidateSplitters();
+            hierarchyPresenter.InvalidateSplitters();
         }
-        internal void InternalAddLogicalChild(object child)
+
+        internal void InternalAddLogicalChild(object newChild)
         {
-            this.AddLogicalChild(child);
+            AddLogicalChild(newChild);
         }
-        internal void InternalRemoveLogicalChild(object child)
+
+        internal void InternalRemoveLogicalChild(object oldChild)
         {
-            this.RemoveLogicalChild(child);
-            this.hierarchyPresenter.InvalidateMeasure();
+            RemoveLogicalChild(oldChild);
+            hierarchyPresenter.InvalidateMeasure();
         }
+
         #endregion
 
 
         #region Control overrides
+
         /// <summary>
         /// Updates the size of all visual children when required.
         /// </summary>
@@ -158,15 +172,15 @@ namespace Docker
         protected override Size ArrangeOverride(Size arrangeBounds)
         {
             // Calculate the final rectangle
-            Rect final = new Rect(0.0, 0.0, arrangeBounds.Width, arrangeBounds.Height);
+            var final = new Rect(0.0, 0.0, arrangeBounds.Width, arrangeBounds.Height);
 
             // Arrange visual children
-            this.background.Arrange(final);
+            background.Arrange(final);
 
             // Arrange the layout panel, but apply the Padding settings before
-            final.Offset(this.Padding.Left, this.Padding.Top);
-            final.Width = Math.Max(final.Width - (this.Padding.Left + this.Padding.Right), 0.0);
-            final.Height = Math.Max(final.Height - (this.Padding.Top + this.Padding.Bottom), 0.0);
+            final.Offset(Padding.Left, Padding.Top);
+            final.Width = Math.Max(final.Width - (Padding.Left + Padding.Right), 0.0);
+            final.Height = Math.Max(final.Height - (Padding.Top + Padding.Bottom), 0.0);
             layoutPanel.Arrange(final);
 
             return arrangeBounds;
@@ -175,22 +189,24 @@ namespace Docker
         protected override Size MeasureOverride(Size constraint)
         {
             // Measure background against constraints
-            this.background.Measure(constraint);
+            background.Measure(constraint);
 
             // Apply padding to constraint and measure layout panel
-            constraint.Width -= this.Padding.Left + this.Padding.Right;
-            constraint.Height -= this.Padding.Top + this.Padding.Bottom;
-            this.layoutPanel.Measure(constraint);
+            constraint.Width -= Padding.Left + Padding.Right;
+            constraint.Height -= Padding.Top + Padding.Bottom;
+            layoutPanel.Measure(constraint);
 
             // Return layout panel's desired size with padding applied
             return new Size(
-                this.layoutPanel.DesiredSize.Width + this.Padding.Left + this.Padding.Right,
-                this.layoutPanel.DesiredSize.Height + this.Padding.Top + this.Padding.Bottom);
+                layoutPanel.DesiredSize.Width + Padding.Left + Padding.Right,
+                layoutPanel.DesiredSize.Height + Padding.Top + Padding.Bottom);
         }
+
         /// <summary>
         /// We have a fixed amount of visual children.
         /// </summary>
         protected override int VisualChildrenCount => 2;
+
         /// <summary>
         /// Assigns an index to each available visual child.
         /// </summary>
@@ -198,51 +214,59 @@ namespace Docker
         /// <returns>The visual child.</returns>
         protected override Visual GetVisualChild(int index)
         {
-            switch(index)
+            switch (index)
             {
                 case 0:
-                    return this.background;
+                    return background;
                 case 1:
-                    return this.layoutPanel;
+                    return layoutPanel;
             }
 
             throw new ArgumentOutOfRangeException(nameof(index));
         }
+
         #endregion
 
 
         #region Properties
+
         private UIElement child;
+
         /// <summary>
         /// The content property of this control.
         /// </summary>
         public UIElement Child
         {
-            get => this.child;
+            get => child;
             set
             {
-                if (value != this.child)
+                if (value != child)
                 {
-                    if (this.child != null)
+                    if (child != null)
                     {
-                        this.RemoveLogicalChild(Child);
+                        RemoveLogicalChild(Child);
                     }
 
-                    this.child = value;
-                    this.hierarchyPresenter.Child = value;
+                    child = value;
+                    hierarchyPresenter.Child = value;
 
-                    if (this.child != null)
+                    if (child != null)
                     {
-                        this.AddLogicalChild(Child);
+                        AddLogicalChild(Child);
                     }
                 }
             }
         }
+
         /// <summary>
         /// A collection of all split containers of this canvas.
         /// </summary>
         public SplitContainerCollection SplitContainers { get; }
-        public Rect ClientBounds { get => new Rect(this.hierarchyPresenter.TransformToAncestor(this).Transform(this.hierarchyPresenter.ClientBounds.Location), this.hierarchyPresenter.ClientBounds.Size); }
+
+        public Rect ClientBounds =>
+            new Rect(hierarchyPresenter.TransformToAncestor(this).Transform(hierarchyPresenter.ClientBounds.Location),
+                hierarchyPresenter.ClientBounds.Size);
+
         #endregion
     }
 }

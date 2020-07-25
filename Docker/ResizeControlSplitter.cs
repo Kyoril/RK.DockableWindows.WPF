@@ -22,27 +22,27 @@ namespace Docker
             /// <summary>
             /// The dock side of the associated split container element.
             /// </summary>
-            public Dock splitterDockSide;
+            public Dock SplitterDockSide;
             /// <summary>
             /// The adorner that is rendered to preview the new splitter position.
             /// </summary>
-            public SplitPreviewAdorner previewAdorner;
+            public SplitPreviewAdorner PreviewAdorner;
             /// <summary>
             /// The associated split container.
             /// </summary>
-            public SplitContainer parent;
+            public SplitContainer Parent;
             /// <summary>
             /// The minimum offset of the splitter.
             /// </summary>
-            public double minOffset;
+            public double MinOffset;
             /// <summary>
             /// The maximum offset of the splitter.
             /// </summary>
-            public double maxOffset;
+            public double MaxOffset;
         }
 
 
-        private DockCanvas canvas;
+        private readonly DockCanvas canvas;
         private ResizeData resizeData;
 
 
@@ -53,7 +53,7 @@ namespace Docker
                 typeof(double),
                 typeof(ResizeControlSplitter),
                 new FrameworkPropertyMetadata(4.0, FrameworkPropertyMetadataOptions.AffectsMeasure),
-                new ValidateValueCallback((o) => (double)o >= 0.0));
+                o => (double)o >= 0.0);
         #endregion
 
 
@@ -62,16 +62,17 @@ namespace Docker
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(ResizeControlSplitter), new FrameworkPropertyMetadata(typeof(ResizeControlSplitter)));
 
-            EventManager.RegisterClassHandler(typeof(ResizeControlSplitter), ResizeControlSplitter.DragStartedEvent, new DragStartedEventHandler(ResizeControlSplitter.OnDragStarted));
-            EventManager.RegisterClassHandler(typeof(ResizeControlSplitter), ResizeControlSplitter.DragDeltaEvent, new DragDeltaEventHandler(ResizeControlSplitter.OnDragDelta));
-            EventManager.RegisterClassHandler(typeof(ResizeControlSplitter), ResizeControlSplitter.DragCompletedEvent, new DragCompletedEventHandler(ResizeControlSplitter.OnDragCompleted));
+            EventManager.RegisterClassHandler(typeof(ResizeControlSplitter), DragStartedEvent, new DragStartedEventHandler(OnDragStarted));
+            EventManager.RegisterClassHandler(typeof(ResizeControlSplitter), DragDeltaEvent, new DragDeltaEventHandler(OnDragDelta));
+            EventManager.RegisterClassHandler(typeof(ResizeControlSplitter), DragCompletedEvent, new DragCompletedEventHandler(OnDragCompleted));
         }
+
         internal ResizeControlSplitter(DockCanvas canvas, SplitContainer resizeControl)
         {
             this.canvas = canvas;
-            this.ResizeControl = resizeControl;
+            ResizeControl = resizeControl;
 
-            if (this.ResizeControl != null)
+            if (ResizeControl != null)
             {
                 UpdateCursor();
             }
@@ -86,104 +87,112 @@ namespace Docker
             {
                 if (!e.Canceled)
                 {
-                    switch(this.resizeData.splitterDockSide)
+                    switch (resizeData.SplitterDockSide)
                     {
                         case Dock.Right:
-                            this.resizeData.parent.ContentSize = Math.Max(this.resizeData.parent.ContentSize - this.resizeData.previewAdorner.OffsetX, 15.0);
+                            resizeData.Parent.ContentSize = Math.Max(this.resizeData.Parent.ContentSize - this.resizeData.PreviewAdorner.OffsetX, 15.0);
                             break;
                         case Dock.Left:
-                            this.resizeData.parent.ContentSize = Math.Max(this.resizeData.parent.ContentSize + this.resizeData.previewAdorner.OffsetX, 15.0);
+                            resizeData.Parent.ContentSize = Math.Max(this.resizeData.Parent.ContentSize + this.resizeData.PreviewAdorner.OffsetX, 15.0);
                             break;
                         case Dock.Top:
-                            this.resizeData.parent.ContentSize = Math.Max(this.resizeData.parent.ContentSize + this.resizeData.previewAdorner.OffsetY, 15.0);
+                            resizeData.Parent.ContentSize = Math.Max(this.resizeData.Parent.ContentSize + this.resizeData.PreviewAdorner.OffsetY, 15.0);
                             break;
                         default:
-                            this.resizeData.parent.ContentSize = Math.Max(this.resizeData.parent.ContentSize - this.resizeData.previewAdorner.OffsetY, 15.0);
+                            resizeData.Parent.ContentSize = Math.Max(this.resizeData.Parent.ContentSize - this.resizeData.PreviewAdorner.OffsetY, 15.0);
                             break;
                     }
                 }
 
-                if (VisualTreeHelper.GetParent(this.resizeData.previewAdorner) is AdornerLayer adornerLayer)
+                if (VisualTreeHelper.GetParent(resizeData.PreviewAdorner) is AdornerLayer adornerLayer)
                 {
-                    adornerLayer.Remove(this.resizeData.previewAdorner);
+                    adornerLayer.Remove(resizeData.PreviewAdorner);
                 }
-                
-                this.resizeData = null;
+
+                resizeData = null;
             }
         }
+
         private static void OnDragCompleted(object sender, DragCompletedEventArgs e)
         {
-            (sender as ResizeControlSplitter).OnDragCompleted(e);
+            (sender as ResizeControlSplitter)?.OnDragCompleted(e);
         }
+
         private void OnDragDelta(DragDeltaEventArgs e)
         {
             if (resizeData != null)
             {
-                switch(resizeData.splitterDockSide)
+                switch (resizeData.SplitterDockSide)
                 {
                     case Dock.Top:
                     case Dock.Bottom:
-                        this.resizeData.previewAdorner.OffsetY = 
+                        resizeData.PreviewAdorner.OffsetY =
                             Math.Max(
-                                Math.Min(e.VerticalChange, resizeData.maxOffset), 
-                                this.resizeData.minOffset);
+                                Math.Min(e.VerticalChange, resizeData.MaxOffset),
+                                resizeData.MinOffset);
                         break;
                     default:
-                        this.resizeData.previewAdorner.OffsetX =
+                        resizeData.PreviewAdorner.OffsetX =
                             Math.Max(
-                                Math.Min(e.HorizontalChange, this.resizeData.maxOffset),
-                                this.resizeData.minOffset);
+                                Math.Min(e.HorizontalChange, resizeData.MaxOffset),
+                                resizeData.MinOffset);
                         break;
                 }
             }
         }
+
         private static void OnDragDelta(object sender, DragDeltaEventArgs e)
         {
-            (sender as ResizeControlSplitter).OnDragDelta(e);
+            (sender as ResizeControlSplitter)?.OnDragDelta(e);
         }
+
         private void OnDragStarted(DragStartedEventArgs e)
         {
-            AdornerLayer adornerLayer = AdornerLayer.GetAdornerLayer(this.ResizeControl);
+            AdornerLayer adornerLayer = AdornerLayer.GetAdornerLayer(ResizeControl);
             if (adornerLayer != null)
             {
-                this.resizeData = new ResizeData();
-                this.resizeData.splitterDockSide = DockCanvas.GetDock(this.ResizeControl);
-                this.resizeData.parent = this.ResizeControl;
+                resizeData = new ResizeData
+                {
+                    SplitterDockSide = DockCanvas.GetDock(ResizeControl),
+                    Parent = ResizeControl
+                };
 
-                switch (resizeData.splitterDockSide)
+                switch (resizeData.SplitterDockSide)
                 {
                     case Dock.Left:
-                        resizeData.minOffset = 15.0 - this.ResizeControl.ContentSize;
-                        resizeData.maxOffset = this.canvas.ClientBounds.Width - 32.0;
+                        resizeData.MinOffset = 15.0 - ResizeControl.ContentSize;
+                        resizeData.MaxOffset = canvas.ClientBounds.Width - 32.0;
                         break;
 
                     case Dock.Top:
-                        resizeData.minOffset = 15.0 - this.ResizeControl.ContentSize;
-                        resizeData.maxOffset = this.canvas.ClientBounds.Height - 32.0;
+                        resizeData.MinOffset = 15.0 - ResizeControl.ContentSize;
+                        resizeData.MaxOffset = canvas.ClientBounds.Height - 32.0;
                         break;
 
                     case Dock.Right:
-                        resizeData.maxOffset = this.ResizeControl.ContentSize - 15.0;
-                        resizeData.minOffset = 32.0 - this.canvas.ClientBounds.Width;
+                        resizeData.MaxOffset = ResizeControl.ContentSize - 15.0;
+                        resizeData.MinOffset = 32.0 - canvas.ClientBounds.Width;
                         break;
 
                     case Dock.Bottom:
-                        resizeData.maxOffset = this.ResizeControl.ContentSize - 15.0;
-                        resizeData.minOffset = 32.0 - this.canvas.ClientBounds.Height;
+                        resizeData.MaxOffset = ResizeControl.ContentSize - 15.0;
+                        resizeData.MinOffset = 32.0 - canvas.ClientBounds.Height;
                         break;
                 }
 
-                resizeData.previewAdorner = new SplitPreviewAdorner(this, null);
-                adornerLayer.Add(this.resizeData.previewAdorner);
+                resizeData.PreviewAdorner = new SplitPreviewAdorner(this, null);
+                adornerLayer.Add(resizeData.PreviewAdorner);
             }
         }
+
         private static void OnDragStarted(object sender, DragStartedEventArgs e)
         {
-            (sender as ResizeControlSplitter).OnDragStarted(e);
+            (sender as ResizeControlSplitter)?.OnDragStarted(e);
         }
+
         internal void UpdateCursor()
         {
-            switch (DockCanvas.GetDock(this.ResizeControl))
+            switch (DockCanvas.GetDock(ResizeControl))
             {
                 case Dock.Left:
                 case Dock.Right:
@@ -200,7 +209,7 @@ namespace Docker
         #region Thumb overrides
         protected override Size MeasureOverride(Size constraint)
         {
-            return new Size(this.Size, this.Size);
+            return new Size(Size, Size);
         }
         #endregion
 
@@ -209,8 +218,8 @@ namespace Docker
         public SplitContainer ResizeControl { get; }
         public double Size
         {
-            get => (double)GetValue(ResizeControlSplitter.SizeProperty);
-            set => SetValue(ResizeControlSplitter.SizeProperty, value);
+            get => (double)GetValue(SizeProperty);
+            set => SetValue(SizeProperty, value);
         }
         #endregion
     }

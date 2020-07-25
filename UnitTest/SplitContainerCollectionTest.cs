@@ -1,6 +1,6 @@
-﻿using System.Windows.Controls;
-using Docker;
+﻿using Docker;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Windows.Controls;
 
 namespace UnitTest
 {
@@ -19,7 +19,7 @@ namespace UnitTest
             // Add a dock panel as content element to the canvas
             var panel = new DockPanel();
             canvas.Child = panel;
-            
+
             return canvas;
         }
 
@@ -30,8 +30,7 @@ namespace UnitTest
             var canvas = PrepareCanvas();
 
             // Setup a split container collection and add a split container
-            var collection = new SplitContainerCollection(canvas, canvas.Child);
-            collection.Add(new SplitContainer());
+            var collection = new SplitContainerCollection(canvas, canvas.Child) { new SplitContainer() };
 
             // Test that we can get the split container
             var container = collection[0];

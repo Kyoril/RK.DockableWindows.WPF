@@ -1,16 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Docker
 {
     public class DockWindowCollection : ObservableCollection<DockWindow>
     {
-        private WindowGroup parent;
+        private readonly WindowGroup parent;
 
 
         #region Construction
@@ -25,11 +21,11 @@ namespace Docker
         #region Private methods
         private void OnDockWindowRemoved(DockWindow window)
         {
-            this.parent.RemoveLogicalChildInternal(window);
+            parent.RemoveLogicalChildInternal(window);
         }
         private void OnDockWindowAdded(DockWindow window)
         {
-            this.parent.AddLogicalChildInternal(window);
+            parent.AddLogicalChildInternal(window);
         }
         #endregion
 
@@ -39,19 +35,23 @@ namespace Docker
         protected override void OnCollectionChanged(NotifyCollectionChangedEventArgs e)
         {
             base.OnCollectionChanged(e);
-            this.parent.OnChildrenChanged();
+            parent.OnChildrenChanged();
         }
+
         protected override void ClearItems()
         {
-            foreach(DockWindow window in this)
+            foreach (DockWindow window in this)
             {
                 OnDockWindowRemoved(window);
             }
 
             base.ClearItems();
         }
+
         protected override void InsertItem(int index, DockWindow item)
         {
+            if (item == null) throw new ArgumentNullException(nameof(item));
+
             OnDockWindowAdded(item);
 
             try
@@ -63,6 +63,7 @@ namespace Docker
                 OnDockWindowRemoved(item);
             }
         }
+
         protected override void RemoveItem(int index)
         {
             DockWindow window = base[index];
