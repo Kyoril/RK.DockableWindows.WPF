@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.1145
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30225.117
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Docker", "Docker\Docker.csproj", "{1D31B17D-E623-4C89-B1FB-17782C7581B3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RK.DockableWindows.WPF", "RK.DockableWindows.WPF\RK.DockableWindows.WPF.csproj", "{1D31B17D-E623-4C89-B1FB-17782C7581B3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo", "Demo\Demo.csproj", "{96767F6A-A770-4EF5-9F78-2A7B6920655F}"
 EndProject

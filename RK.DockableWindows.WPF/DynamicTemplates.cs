@@ -1,5 +1,4 @@
-﻿
-namespace Docker
+﻿namespace RK.DockableWindows.WPF
 {
     /// <summary>
     /// Contains dynamic control template types. These can be used to change the whole

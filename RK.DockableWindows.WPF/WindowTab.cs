@@ -4,7 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace Docker
+namespace RK.DockableWindows.WPF
 {
     /// <summary>
     /// This control represents a single tab at the bottom of a WindowGroup. This tab can be clicked

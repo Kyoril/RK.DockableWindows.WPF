@@ -3,8 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Windows;
 
-
-namespace Docker
+namespace RK.DockableWindows.WPF
 {
     /// <summary>
     /// A class which contains content elements of a SplitContainer.

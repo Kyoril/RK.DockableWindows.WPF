@@ -4,7 +4,7 @@ using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows.Shapes;
 
-namespace Docker
+namespace RK.DockableWindows.WPF
 {
     public class SplitPreviewAdorner : Adorner
     {

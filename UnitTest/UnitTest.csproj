@@ -58,9 +58,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Docker\Docker.csproj">
+    <ProjectReference Include="..\RK.DockableWindows.WPF\RK.DockableWindows.WPF.csproj">
       <Project>{1d31b17d-e623-4c89-b1fb-17782c7581b3}</Project>
-      <Name>Docker</Name>
+      <Name>RK.DockableWindows.WPF</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />

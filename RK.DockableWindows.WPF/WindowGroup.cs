@@ -6,7 +6,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Markup;
 
-namespace Docker
+namespace RK.DockableWindows.WPF
 {
     /// <summary>
     /// This control wraps around dockable windows. It contains a title bar, a content area and

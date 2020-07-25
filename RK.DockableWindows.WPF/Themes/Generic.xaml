@@ -1,50 +1,50 @@
 <ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="clr-namespace:Docker">
+    xmlns:wpf="clr-namespace:RK.DockableWindows.WPF">
 
     <!-- Default background brush for DockCanvas element -->
-    <SolidColorBrush x:Key="{ComponentResourceKey ResourceId={x:Static local:ControlElements.DockCanvasBackgroundBrush}, TypeInTargetAssembly={x:Type local:ControlElements}}" 
+    <SolidColorBrush x:Key="{ComponentResourceKey ResourceId={x:Static wpf:ControlElements.DockCanvasBackgroundBrush}, TypeInTargetAssembly={x:Type wpf:ControlElements}}" 
                      Color="#EEEEF2" />
-    <SolidColorBrush x:Key="{ComponentResourceKey ResourceId={x:Static local:ControlElements.DockControlBorderBrush}, TypeInTargetAssembly={x:Type local:ControlElements}}" 
+    <SolidColorBrush x:Key="{ComponentResourceKey ResourceId={x:Static wpf:ControlElements.DockControlBorderBrush}, TypeInTargetAssembly={x:Type wpf:ControlElements}}" 
                      Color="#CCCEDB" />
 
     <!-- Default style of the DockCanvas control -->
-    <Style x:Key="{x:Type local:DockCanvas}" TargetType="{x:Type local:DockCanvas}">
-        <Setter Property="Background" Value="{DynamicResource {ComponentResourceKey ResourceId={x:Static local:ControlElements.DockCanvasBackgroundBrush},TypeInTargetAssembly={x:Type local:ControlElements}}}" />
+    <Style x:Key="{x:Type wpf:DockCanvas}" TargetType="{x:Type wpf:DockCanvas}">
+        <Setter Property="Background" Value="{DynamicResource {ComponentResourceKey ResourceId={x:Static wpf:ControlElements.DockCanvasBackgroundBrush},TypeInTargetAssembly={x:Type wpf:ControlElements}}}" />
         <Setter Property="FrameworkElement.FocusVisualStyle" Value="{x:Null}" />
         
         <Style.Resources>
             <ResourceDictionary>
-                <Style x:Key="{x:Type local:WindowGroup}" TargetType="{x:Type local:WindowGroup}">
+                <Style x:Key="{x:Type wpf:WindowGroup}" TargetType="{x:Type wpf:WindowGroup}">
                     <Style.Resources>
                         <ResourceDictionary>
-                            <Style x:Key="{x:Type local:WindowTab}" TargetType="{x:Type local:WindowTab}">
-                                <Setter Property="Template" Value="{DynamicResource {ComponentResourceKey ResourceId={x:Static local:DynamicTemplates.DockableWindowTabTemplate}, TypeInTargetAssembly={x:Type local:DynamicTemplates}}}" />
+                            <Style x:Key="{x:Type wpf:WindowTab}" TargetType="{x:Type wpf:WindowTab}">
+                                <Setter Property="Template" Value="{DynamicResource {ComponentResourceKey ResourceId={x:Static wpf:DynamicTemplates.DockableWindowTabTemplate}, TypeInTargetAssembly={x:Type wpf:DynamicTemplates}}}" />
                             </Style>
                         </ResourceDictionary>
                     </Style.Resources>
-                    <Setter Property="Template" Value="{DynamicResource {ComponentResourceKey ResourceId={x:Static local:DynamicTemplates.WindowGroupTemplate}, TypeInTargetAssembly={x:Type local:DynamicTemplates}}}" />
+                    <Setter Property="Template" Value="{DynamicResource {ComponentResourceKey ResourceId={x:Static wpf:DynamicTemplates.WindowGroupTemplate}, TypeInTargetAssembly={x:Type wpf:DynamicTemplates}}}" />
                 </Style>
             </ResourceDictionary>
         </Style.Resources>
     </Style>
 
     <!-- Window Tab -->
-    <Style x:Key="{x:Type local:WindowTab}" TargetType="{x:Type local:WindowTab}">
-        <Setter Property="Template" Value="{DynamicResource {ComponentResourceKey ResourceId={x:Static local:DynamicTemplates.DockableWindowTabTemplate}, TypeInTargetAssembly={x:Type local:DynamicTemplates}}}" />
+    <Style x:Key="{x:Type wpf:WindowTab}" TargetType="{x:Type wpf:WindowTab}">
+        <Setter Property="Template" Value="{DynamicResource {ComponentResourceKey ResourceId={x:Static wpf:DynamicTemplates.DockableWindowTabTemplate}, TypeInTargetAssembly={x:Type wpf:DynamicTemplates}}}" />
     </Style>
 
     <!-- Default style for the WindowGroup control -->
-    <Style TargetType="{x:Type local:WindowGroup}">
-        <Setter Property="Template" Value="{DynamicResource {ComponentResourceKey ResourceId={x:Static local:DynamicTemplates.WindowGroupTemplate}, TypeInTargetAssembly={x:Type local:DynamicTemplates}}}" />
+    <Style TargetType="{x:Type wpf:WindowGroup}">
+        <Setter Property="Template" Value="{DynamicResource {ComponentResourceKey ResourceId={x:Static wpf:DynamicTemplates.WindowGroupTemplate}, TypeInTargetAssembly={x:Type wpf:DynamicTemplates}}}" />
     </Style>
 
     <!-- TitleBarButtonTemplate -->
     <ControlTemplate x:Key="TitleBarButtonTemplate" 
                      TargetType="{x:Type ButtonBase}">
         <Border Name="ButtonBorder" 
-                Style="{DynamicResource {ComponentResourceKey ResourceId={x:Static local:ControlElements.TitleBarButton}, TypeInTargetAssembly={x:Type local:DockCanvas}}}">
+                Style="{DynamicResource {ComponentResourceKey ResourceId={x:Static wpf:ControlElements.TitleBarButton}, TypeInTargetAssembly={x:Type wpf:DockCanvas}}}">
             <ContentPresenter Margin="{TemplateBinding Padding}" />
         </Border>
         
@@ -52,75 +52,75 @@
             <MultiDataTrigger>
                 <MultiDataTrigger.Conditions>
                     <Condition Value="False" 
-                               Binding="{Binding Path=IsKeyboardFocusWithin, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:WindowGroup}}}" />
+                               Binding="{Binding Path=IsKeyboardFocusWithin, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type wpf:WindowGroup}}}" />
                     <Condition Value="True" 
                                Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource Self}}" />
                 </MultiDataTrigger.Conditions>
                 <Setter TargetName="ButtonBorder" 
                         Property="FrameworkElement.Style" 
-                        Value="{DynamicResource {ComponentResourceKey ResourceId={x:Static local:ControlElements.InactiveTitleBarButtonHot}, TypeInTargetAssembly={x:Type local:DockCanvas}}}" />
+                        Value="{DynamicResource {ComponentResourceKey ResourceId={x:Static wpf:ControlElements.InactiveTitleBarButtonHot}, TypeInTargetAssembly={x:Type wpf:DockCanvas}}}" />
             </MultiDataTrigger>
             
             <MultiDataTrigger>
                 <MultiDataTrigger.Conditions>
                     <Condition Value="True" 
-                               Binding="{Binding Path=IsKeyboardFocusWithin, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:WindowGroup}}}" />
+                               Binding="{Binding Path=IsKeyboardFocusWithin, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type wpf:WindowGroup}}}" />
                     <Condition Value="True" 
                                Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource Self}}" />
                 </MultiDataTrigger.Conditions>
                 <Setter TargetName="ButtonBorder" 
                         Property="FrameworkElement.Style" 
-                        Value="{DynamicResource {ComponentResourceKey ResourceId={x:Static local:ControlElements.ActiveTitleBarButtonHot}, TypeInTargetAssembly={x:Type local:DockCanvas}}}" />
+                        Value="{DynamicResource {ComponentResourceKey ResourceId={x:Static wpf:ControlElements.ActiveTitleBarButtonHot}, TypeInTargetAssembly={x:Type wpf:DockCanvas}}}" />
             </MultiDataTrigger>
             
             <MultiDataTrigger>
                 <MultiDataTrigger.Conditions>
                     <Condition Value="True" 
-                               Binding="{Binding Path=IsKeyboardFocusWithin, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:WindowGroup}}}" />
+                               Binding="{Binding Path=IsKeyboardFocusWithin, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type wpf:WindowGroup}}}" />
                     <Condition Value="True" 
                                Binding="{Binding Path=IsPressed, RelativeSource={RelativeSource Self}}" />
                 </MultiDataTrigger.Conditions>
                 <Setter TargetName="ButtonBorder" 
                         Property="FrameworkElement.Style"
-                        Value="{DynamicResource {ComponentResourceKey ResourceId={x:Static local:ControlElements.ActiveTitleBarButtonPressed}, TypeInTargetAssembly={x:Type local:DockCanvas}}}" />
+                        Value="{DynamicResource {ComponentResourceKey ResourceId={x:Static wpf:ControlElements.ActiveTitleBarButtonPressed}, TypeInTargetAssembly={x:Type wpf:DockCanvas}}}" />
             </MultiDataTrigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
 
     <!-- TitleBarBackground -->
     <Style x:Key="TitleBarBackground">
-        <Setter Property="Control.BorderBrush" Value="{DynamicResource {ComponentResourceKey ResourceId={x:Static local:ControlElements.DockControlBorderBrush},TypeInTargetAssembly={x:Type local:ControlElements}}}" />
+        <Setter Property="Control.BorderBrush" Value="{DynamicResource {ComponentResourceKey ResourceId={x:Static wpf:ControlElements.DockControlBorderBrush},TypeInTargetAssembly={x:Type wpf:ControlElements}}}" />
         <Setter Property="Control.BorderThickness" Value="1,1,1,0" />
     </Style>
 
     <!-- InactiveDockedTitleBar -->
-    <Style x:Key="{ComponentResourceKey ResourceId={x:Static local:ControlElements.InactiveDockedTitleBar}, TypeInTargetAssembly={x:Type local:DockCanvas}}" BasedOn="{StaticResource TitleBarBackground}">
+    <Style x:Key="{ComponentResourceKey ResourceId={x:Static wpf:ControlElements.InactiveDockedTitleBar}, TypeInTargetAssembly={x:Type wpf:DockCanvas}}" BasedOn="{StaticResource TitleBarBackground}">
         <!-- Nothing to do here right now other than to just inherit TitleBarBackground style -->
     </Style>
 
     <!-- ActiveDockedTitleBar -->
-    <Style x:Key="{ComponentResourceKey ResourceId={x:Static local:ControlElements.ActiveDockedTitleBar}, TypeInTargetAssembly={x:Type local:DockCanvas}}" BasedOn="{StaticResource TitleBarBackground}">
+    <Style x:Key="{ComponentResourceKey ResourceId={x:Static wpf:ControlElements.ActiveDockedTitleBar}, TypeInTargetAssembly={x:Type wpf:DockCanvas}}" BasedOn="{StaticResource TitleBarBackground}">
         <Setter Property="Control.Background" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
         <Setter Property="TextElement.Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" />
     </Style>
     
     <!-- TitleBarButton -->
-    <Style x:Key="{ComponentResourceKey ResourceId={x:Static local:ControlElements.TitleBarButton}, TypeInTargetAssembly={x:Type local:DockCanvas}}">
+    <Style x:Key="{ComponentResourceKey ResourceId={x:Static wpf:ControlElements.TitleBarButton}, TypeInTargetAssembly={x:Type wpf:DockCanvas}}">
         <Setter Property="Control.BorderThickness" Value="1" />
     </Style>
     
     <!-- InactiveTitleBarButtonHot -->
-    <Style x:Key="{ComponentResourceKey ResourceId={x:Static local:ControlElements.InactiveTitleBarButtonHot}, TypeInTargetAssembly={x:Type local:DockCanvas}}" BasedOn="{StaticResource {ComponentResourceKey ResourceId={x:Static local:ControlElements.TitleBarButton}, TypeInTargetAssembly={x:Type local:DockCanvas}}}">
+    <Style x:Key="{ComponentResourceKey ResourceId={x:Static wpf:ControlElements.InactiveTitleBarButtonHot}, TypeInTargetAssembly={x:Type wpf:DockCanvas}}" BasedOn="{StaticResource {ComponentResourceKey ResourceId={x:Static wpf:ControlElements.TitleBarButton}, TypeInTargetAssembly={x:Type wpf:DockCanvas}}}">
         <Setter Property="Control.Background" Value="#7FFFFFFF" />
     </Style>
 
     <!-- ActiveTitleBarButtonHot -->
-    <Style x:Key="{ComponentResourceKey ResourceId={x:Static local:ControlElements.ActiveTitleBarButtonHot}, TypeInTargetAssembly={x:Type local:DockCanvas}}" BasedOn="{StaticResource {ComponentResourceKey ResourceId={x:Static local:ControlElements.TitleBarButton}, TypeInTargetAssembly={x:Type local:DockCanvas}}}">
+    <Style x:Key="{ComponentResourceKey ResourceId={x:Static wpf:ControlElements.ActiveTitleBarButtonHot}, TypeInTargetAssembly={x:Type wpf:DockCanvas}}" BasedOn="{StaticResource {ComponentResourceKey ResourceId={x:Static wpf:ControlElements.TitleBarButton}, TypeInTargetAssembly={x:Type wpf:DockCanvas}}}">
         <Setter Property="Control.Background" Value="#60FFFFFF" />
     </Style>
     
     <!-- WindowGroupTemplate -->
-    <ControlTemplate x:Key="{ComponentResourceKey ResourceId={x:Static local:DynamicTemplates.WindowGroupTemplate}, TypeInTargetAssembly={x:Type local:DynamicTemplates}}" TargetType="{x:Type local:WindowGroup}">
+    <ControlTemplate x:Key="{ComponentResourceKey ResourceId={x:Static wpf:DynamicTemplates.WindowGroupTemplate}, TypeInTargetAssembly={x:Type wpf:DynamicTemplates}}" TargetType="{x:Type wpf:WindowGroup}">
         <!-- Window consists of a grid with three rows: TitleBar, Content, WindowList (tabs)-->
         <Grid SnapsToDevicePixels="True">
             <!-- Row definitions -->
@@ -134,7 +134,7 @@
             <Border Name="PART_TitleBar" 
                     Grid.Row="0" 
                     Padding="3,0,2,0" 
-                    Style="{DynamicResource {ComponentResourceKey ResourceId={x:Static local:ControlElements.InactiveDockedTitleBar}, TypeInTargetAssembly={x:Type local:DockCanvas}}}">
+                    Style="{DynamicResource {ComponentResourceKey ResourceId={x:Static wpf:ControlElements.InactiveDockedTitleBar}, TypeInTargetAssembly={x:Type wpf:DockCanvas}}}">
                 <DockPanel>
                     <Button Name="PART_CloseButton" 
                             Focusable="False" 
@@ -144,7 +144,7 @@
                             Padding="1" 
                             Template="{StaticResource TitleBarButtonTemplate}" 
                             Foreground="{Binding ElementName=PART_TitleBar, Path=(TextElement.Foreground)}"
-                            Command="{x:Static local:DockWindow.CloseCommand}"
+                            Command="{x:Static wpf:DockWindow.CloseCommand}"
                             CommandTarget="{Binding Path=SelectedWindow, RelativeSource={RelativeSource TemplatedParent}}">
                         <TextBlock FontFamily="Marlett" FontSize="12" Text="r" />
                     </Button>
@@ -203,7 +203,7 @@
                 <Border.Style>
                     <Style>
                         <Setter Property="Control.BorderBrush" 
-                                Value="{DynamicResource {ComponentResourceKey ResourceId={x:Static local:ControlElements.DockControlBorderBrush},TypeInTargetAssembly={x:Type local:ControlElements}}}" />
+                                Value="{DynamicResource {ComponentResourceKey ResourceId={x:Static wpf:ControlElements.DockControlBorderBrush},TypeInTargetAssembly={x:Type wpf:ControlElements}}}" />
                         <Setter Property="Control.BorderThickness" 
                                 Value="1,0,1.5,1" />
                     </Style>
@@ -213,15 +213,15 @@
             </Border>
             
             <!-- WindowList part (tabs) -->
-            <Border Name="TabStripContainer" Grid.Row="2" Style="{DynamicResource {ComponentResourceKey ResourceId={x:Static local:ControlElements.WindowGroupTabStripContainer}, TypeInTargetAssembly={x:Type local:DockCanvas}}}">
-                <Border Style="{DynamicResource {ComponentResourceKey ResourceId={x:Static local:ControlElements.WindowGroupTabStrip}, TypeInTargetAssembly={x:Type local:DockCanvas}}}">
-                    <local:WindowList x:Name="PART_WindowList" ItemsSource="{Binding Path=Windows, RelativeSource={RelativeSource TemplatedParent}}">
+            <Border Name="TabStripContainer" Grid.Row="2" Style="{DynamicResource {ComponentResourceKey ResourceId={x:Static wpf:ControlElements.WindowGroupTabStripContainer}, TypeInTargetAssembly={x:Type wpf:DockCanvas}}}">
+                <Border Style="{DynamicResource {ComponentResourceKey ResourceId={x:Static wpf:ControlElements.WindowGroupTabStrip}, TypeInTargetAssembly={x:Type wpf:DockCanvas}}}">
+                    <wpf:WindowList x:Name="PART_WindowList" ItemsSource="{Binding Path=Windows, RelativeSource={RelativeSource TemplatedParent}}">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
-                                <local:WindowTabPanel HorizontalAlignment="Left" />
+                                <wpf:WindowTabPanel HorizontalAlignment="Left" />
                             </ItemsPanelTemplate>
                         </ItemsControl.ItemsPanel>
-                    </local:WindowList>
+                    </wpf:WindowList>
                 </Border>
             </Border>
         </Grid>
@@ -233,21 +233,21 @@
                      Value="True">
                 <Setter TargetName="PART_TitleBar" 
                         Property="FrameworkElement.Style" 
-                        Value="{DynamicResource {ComponentResourceKey ResourceId={x:Static local:ControlElements.ActiveDockedTitleBar}, TypeInTargetAssembly={x:Type local:DockCanvas}}}" />
+                        Value="{DynamicResource {ComponentResourceKey ResourceId={x:Static wpf:ControlElements.ActiveDockedTitleBar}, TypeInTargetAssembly={x:Type wpf:DockCanvas}}}" />
             </Trigger>
             <!-- Hide WindowListTabs when there aren't more than one window -->
-            <Trigger Property="local:WindowGroup.HasMultipleWindows" Value="False">
+            <Trigger Property="wpf:WindowGroup.HasMultipleWindows" Value="False">
                 <Setter TargetName="TabStripContainer" Property="UIElement.Visibility" Value="Collapsed" />
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
 
-    <Style x:Key="{x:Type local:DockWindow}" 
-           TargetType="{x:Type local:DockWindow}">
+    <Style x:Key="{x:Type wpf:DockWindow}" 
+           TargetType="{x:Type wpf:DockWindow}">
         <Setter Property="Background" Value="#F5F5F5" />
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="{x:Type local:DockWindow}">
+                <ControlTemplate TargetType="{x:Type wpf:DockWindow}">
                     <AdornerDecorator>
                         <Border BorderThickness="{TemplateBinding BorderThickness}" 
                                 BorderBrush="{TemplateBinding BorderBrush}" 
@@ -261,11 +261,11 @@
     </Style>
 
     <!-- SplitContainerSplitter -->
-    <Style x:Key="{x:Type local:SplitContainerSplitter}" TargetType="{x:Type local:SplitContainerSplitter}">
+    <Style x:Key="{x:Type wpf:SplitContainerSplitter}" TargetType="{x:Type wpf:SplitContainerSplitter}">
         <Setter Property="Background" Value="#00FFFFFF" />
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="{x:Type local:SplitContainerSplitter}">
+                <ControlTemplate TargetType="{x:Type wpf:SplitContainerSplitter}">
                     <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" />
                 </ControlTemplate>
             </Setter.Value>
@@ -273,11 +273,11 @@
     </Style>
     
     <!-- ResizeControlSplitter -->
-    <Style x:Key="{x:Type local:ResizeControlSplitter}" TargetType="{x:Type local:ResizeControlSplitter}">
+    <Style x:Key="{x:Type wpf:ResizeControlSplitter}" TargetType="{x:Type wpf:ResizeControlSplitter}">
         <Setter Property="Background" Value="#00FFFFFF" />
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="{x:Type local:ResizeControlSplitter}">
+                <ControlTemplate TargetType="{x:Type wpf:ResizeControlSplitter}">
                     <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" />
                 </ControlTemplate>
             </Setter.Value>
@@ -286,29 +286,29 @@
 
 
     <!-- WindowTab -->
-    <Style x:Key="{ComponentResourceKey ResourceId={x:Static local:ControlElements.WindowTab}, TypeInTargetAssembly={x:Type local:DockCanvas}}">
+    <Style x:Key="{ComponentResourceKey ResourceId={x:Static wpf:ControlElements.WindowTab}, TypeInTargetAssembly={x:Type wpf:DockCanvas}}">
         <Setter Property="Control.BorderBrush" Value="#00FFFFFF" />
         <Setter Property="Control.BorderThickness" Value="1,0,1,1" />
         <Setter Property="TextElement.Foreground" Value="{DynamicResource {x:Static SystemColors.ControlDarkDarkBrushKey}}" />
     </Style>
 
     <!-- WindowSelectedTab -->
-    <Style x:Key="{ComponentResourceKey ResourceId={x:Static local:ControlElements.WindowSelectedTab}, TypeInTargetAssembly={x:Type local:DockCanvas}}" 
-           BasedOn="{StaticResource {ComponentResourceKey ResourceId={x:Static local:ControlElements.WindowTab}, TypeInTargetAssembly={x:Type local:DockCanvas}}}">
+    <Style x:Key="{ComponentResourceKey ResourceId={x:Static wpf:ControlElements.WindowSelectedTab}, TypeInTargetAssembly={x:Type wpf:DockCanvas}}" 
+           BasedOn="{StaticResource {ComponentResourceKey ResourceId={x:Static wpf:ControlElements.WindowTab}, TypeInTargetAssembly={x:Type wpf:DockCanvas}}}">
         <Setter Property="Panel.ZIndex" Value="1" />
         <Setter Property="Control.Background" Value="#F5F5F5" />
-        <Setter Property="Control.BorderBrush" Value="{DynamicResource {ComponentResourceKey ResourceId={x:Static local:ControlElements.DockControlBorderBrush}, TypeInTargetAssembly={x:Type local:ControlElements}}}" />
+        <Setter Property="Control.BorderBrush" Value="{DynamicResource {ComponentResourceKey ResourceId={x:Static wpf:ControlElements.DockControlBorderBrush}, TypeInTargetAssembly={x:Type wpf:ControlElements}}}" />
         <Setter Property="TextElement.Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
     </Style>
 
     <!-- DockableWindowTabTemplate -->
-    <ControlTemplate x:Key="{ComponentResourceKey ResourceId={x:Static local:DynamicTemplates.DockableWindowTabTemplate}, TypeInTargetAssembly={x:Type local:DynamicTemplates}}" 
-                     TargetType="{x:Type local:WindowTab}">
+    <ControlTemplate x:Key="{ComponentResourceKey ResourceId={x:Static wpf:DynamicTemplates.DockableWindowTabTemplate}, TypeInTargetAssembly={x:Type wpf:DynamicTemplates}}" 
+                     TargetType="{x:Type wpf:WindowTab}">
         <Border Name="TabBorder" 
                 MinHeight="21" 
                 Padding="6,2,6,2" 
                 Margin="0,-1,0,1" 
-                Style="{DynamicResource {ComponentResourceKey ResourceId={x:Static local:ControlElements.WindowTab}, TypeInTargetAssembly={x:Type local:DockCanvas}}}">
+                Style="{DynamicResource {ComponentResourceKey ResourceId={x:Static wpf:ControlElements.WindowTab}, TypeInTargetAssembly={x:Type wpf:DockCanvas}}}">
             <DockPanel>
                 <TextBlock TextTrimming="CharacterEllipsis"
                            VerticalAlignment="Center" 
@@ -320,7 +320,7 @@
                          Binding="{Binding Path=Window.IsSelected, RelativeSource={RelativeSource Self}}">
                 <Setter TargetName="TabBorder" 
                         Property="FrameworkElement.Style" 
-                        Value="{DynamicResource {ComponentResourceKey ResourceId={x:Static local:ControlElements.WindowSelectedTab}, TypeInTargetAssembly={x:Type local:DockCanvas}}}" />
+                        Value="{DynamicResource {ComponentResourceKey ResourceId={x:Static wpf:ControlElements.WindowSelectedTab}, TypeInTargetAssembly={x:Type wpf:DockCanvas}}}" />
             </DataTrigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>

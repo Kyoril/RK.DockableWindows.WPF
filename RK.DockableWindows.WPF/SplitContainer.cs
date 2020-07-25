@@ -7,7 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Markup;
 using System.Windows.Media;
 
-namespace Docker
+namespace RK.DockableWindows.WPF
 {
     /// <summary>
     /// This class represents a SplitContainer which is used to split dockable controls

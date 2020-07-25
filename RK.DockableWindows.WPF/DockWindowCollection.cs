@@ -2,7 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 
-namespace Docker
+namespace RK.DockableWindows.WPF
 {
     public class DockWindowCollection : ObservableCollection<DockWindow>
     {
