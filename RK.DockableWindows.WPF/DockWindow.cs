@@ -7,7 +7,7 @@ using System.Windows.Input;
 using System.Windows.Markup;
 using System.Windows.Threading;
 
-namespace Docker
+namespace RK.DockableWindows.WPF
 {
     /// <summary>
     /// A control that can be docked at any side the user want's to. This control contains the actual

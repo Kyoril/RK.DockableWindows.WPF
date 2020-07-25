@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Demo"
-        xmlns:docker="clr-namespace:Docker;assembly=Docker"
+        xmlns:wpf="clr-namespace:RK.DockableWindows.WPF;assembly=RK.DockableWindows.WPF"
         mc:Ignorable="d"
         Title="Docker Demo Application" Height="510" Width="800"
         ResizeMode="CanResizeWithGrip"
@@ -25,48 +25,48 @@
         </StatusBar>
         
         <!-- The dock canvas element -->
-        <docker:DockCanvas>
+        <wpf:DockCanvas>
             <!-- Dockable windows -->
-            <docker:DockCanvas.SplitContainers>
+            <wpf:DockCanvas.SplitContainers>
                 <!-- Left dock side -->
-                <docker:SplitContainer docker:DockCanvas.Dock="Left">
-                    <docker:SplitContainer>
-                        <docker:WindowGroup>
-                            <docker:DockWindow Title="Solution Explorer" x:Name="solutionExplorerWindow" Closing="DockWindow_Closing" Closed="DockWindow_Closed">
+                <wpf:SplitContainer wpf:DockCanvas.Dock="Left">
+                    <wpf:SplitContainer>
+                        <wpf:WindowGroup>
+                            <wpf:DockWindow Title="Solution Explorer" x:Name="solutionExplorerWindow" Closing="DockWindow_Closing" Closed="DockWindow_Closed">
                                 
-                            </docker:DockWindow>
-                        </docker:WindowGroup>
-                        <docker:WindowGroup>
-                            <docker:DockWindow Title="Test" x:Name="testWindow" Closing="DockWindow_Closing" Closed="DockWindow_Closed">
+                            </wpf:DockWindow>
+                        </wpf:WindowGroup>
+                        <wpf:WindowGroup>
+                            <wpf:DockWindow Title="Test" x:Name="testWindow" Closing="DockWindow_Closing" Closed="DockWindow_Closed">
                                 
-                            </docker:DockWindow>
-                            <docker:DockWindow Title="Test 2" x:Name="testWindow2" Closing="DockWindow_Closing" Closed="DockWindow_Closed">
+                            </wpf:DockWindow>
+                            <wpf:DockWindow Title="Test 2" x:Name="testWindow2" Closing="DockWindow_Closing" Closed="DockWindow_Closed">
                                 
-                            </docker:DockWindow>
-                        </docker:WindowGroup>
-                    </docker:SplitContainer>
-                </docker:SplitContainer>
+                            </wpf:DockWindow>
+                        </wpf:WindowGroup>
+                    </wpf:SplitContainer>
+                </wpf:SplitContainer>
 
                 <!-- Right dock side -->
-                <docker:SplitContainer>
-                    <docker:WindowGroup>
-                        <docker:DockWindow Title="Properties" x:Name="propertiesWindow" Closing="DockWindow_Closing" Closed="DockWindow_Closed">
+                <wpf:SplitContainer>
+                    <wpf:WindowGroup>
+                        <wpf:DockWindow Title="Properties" x:Name="propertiesWindow" Closing="DockWindow_Closing" Closed="DockWindow_Closed">
 
-                        </docker:DockWindow>
-                    </docker:WindowGroup>
-                </docker:SplitContainer>
+                        </wpf:DockWindow>
+                    </wpf:WindowGroup>
+                </wpf:SplitContainer>
 
                 <!-- Bottom dock container -->
-                <docker:SplitContainer docker:DockCanvas.Dock="Bottom">
-                    <docker:WindowGroup>
-                        <docker:DockWindow Title="Output" x:Name="outputWindow" Closing="DockWindow_Closing" Closed="DockWindow_Closed">
+                <wpf:SplitContainer wpf:DockCanvas.Dock="Bottom">
+                    <wpf:WindowGroup>
+                        <wpf:DockWindow Title="Output" x:Name="outputWindow" Closing="DockWindow_Closing" Closed="DockWindow_Closed">
                             <ListView BorderThickness="0" Background="Transparent" x:Name="logList">
                                 
                             </ListView>
-                        </docker:DockWindow>
-                    </docker:WindowGroup>
-                </docker:SplitContainer>
-            </docker:DockCanvas.SplitContainers>
-        </docker:DockCanvas>
+                        </wpf:DockWindow>
+                    </wpf:WindowGroup>
+                </wpf:SplitContainer>
+            </wpf:DockCanvas.SplitContainers>
+        </wpf:DockCanvas>
     </DockPanel>
 </Window>

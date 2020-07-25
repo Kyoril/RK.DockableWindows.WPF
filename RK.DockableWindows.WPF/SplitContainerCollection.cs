@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Windows.Media;
 
-namespace Docker
+namespace RK.DockableWindows.WPF
 {
     /// <summary>
     /// A class which collects multiple SplitContainer elements. This class is currently used in

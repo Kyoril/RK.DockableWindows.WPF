@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 
-namespace Docker
+namespace RK.DockableWindows.WPF
 {
     /// <summary>
     /// A layout panel which contains all WindowTab items in it and arranges them properly.
