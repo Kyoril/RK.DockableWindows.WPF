@@ -129,14 +129,7 @@ namespace RK.DockableWindows.WPF
             // try to find a new selected window (or reset to null).
             if (SelectedWindow != null && !Windows.Contains(SelectedWindow))
             {
-                if (Windows.Count != 0)
-                {
-                    SelectedWindow = Windows[0];
-                }
-                else
-                {
-                    SelectedWindow = null;
-                }
+                SelectedWindow = Windows.Count != 0 ? Windows[0] : null;
             }
 
             // Eventually update the tab bar visibility
@@ -180,7 +173,7 @@ namespace RK.DockableWindows.WPF
 
         private void OnTitleBarPreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-            SelectedWindow?.SelectAndPopup(true);
+            SelectedWindow?.SelectAndPopup();
         }
         #endregion
 

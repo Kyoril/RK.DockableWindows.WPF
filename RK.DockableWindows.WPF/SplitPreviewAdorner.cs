@@ -13,7 +13,7 @@ namespace RK.DockableWindows.WPF
 
 
         #region Construction
-        public SplitPreviewAdorner(UIElement element, Style style)
+        public SplitPreviewAdorner(UIElement element)
             : base(element)
         {
             SnapsToDevicePixels = true;

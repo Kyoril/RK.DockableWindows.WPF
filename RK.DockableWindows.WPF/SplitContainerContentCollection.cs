@@ -33,7 +33,12 @@ namespace RK.DockableWindows.WPF
 
         public void Insert(int index, FrameworkElement element)
         {
-            VerifyElement(element);
+            if (element == null) throw new ArgumentNullException(nameof(element));
+
+            if (!(element is SplitContainer) && !(element is WindowGroup))
+            {
+                throw new ArgumentException(@"Only SplitContainer and WindowGroup elements are allowed to be children of a SplitContainer element!", nameof(element));
+            }
 
             // Children start to change...
             OnChildrenChanging();
@@ -71,28 +76,7 @@ namespace RK.DockableWindows.WPF
         }
         #endregion
 
-
-
-        #region Private methods
-        /// <summary>
-        /// Verifies that an element has been given and that the given element has a supported type.
-        /// </summary>
-        /// <param name="element">The element instance to verify.</param>
-        private void VerifyElement(FrameworkElement element)
-        {
-            if (element == null)
-            {
-                throw new ArgumentNullException(nameof(element));
-            }
-            if (!(element is SplitContainer) && !(element is WindowGroup))
-            {
-                throw new ArgumentException(@"Only SplitContainer and WindowGroup elements are allowed to be children of a SplitContainer element!", nameof(element));
-            }
-        }
-        #endregion
-
-
-
+        
         #region Properties
         /// <summary>
         /// Gets or sets the capacity.

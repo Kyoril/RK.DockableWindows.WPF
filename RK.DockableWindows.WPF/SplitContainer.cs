@@ -115,7 +115,6 @@ namespace RK.DockableWindows.WPF
             }
 
             var containerSplitters = new List<SplitContainerSplitter>();
-            var elements = new List<FrameworkElement>();
 
             FrameworkElement beforeElement = null;
 
@@ -130,7 +129,6 @@ namespace RK.DockableWindows.WPF
                 }
 
                 beforeElement = child;
-                elements.Add(child);
             }
 
             // We have new splitters

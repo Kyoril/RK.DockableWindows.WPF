@@ -20,7 +20,6 @@ namespace RK.DockableWindows.WPF
             public double MinOffset;
             public double AfterElementSize;
             public SplitPreviewAdorner PreviewAdorner;
-            public SplitContainer Parent;
             public double BeforeElementSize;
         }
 
@@ -80,37 +79,33 @@ namespace RK.DockableWindows.WPF
         #endregion
 
         #region Private Methods
-        private void OnDragStarted(DragStartedEventArgs e)
+        private void OnDragStarted()
         {
-            if (this.VisualParent is SplitContainer splitContainer)
+            if (!(this.VisualParent is SplitContainer splitContainer)) return;
+
+            var adornerLayer = AdornerLayer.GetAdornerLayer(splitContainer);
+            if (adornerLayer == null) return;
+
+            resizeData = new ResizeData
             {
-                AdornerLayer adornerLayer = AdornerLayer.GetAdornerLayer(splitContainer);
-                if (adornerLayer != null)
-                {
-                    resizeData = new ResizeData
-                    {
-                        Parent = splitContainer,
+                BeforeElementSize = Orientation == Orientation.Horizontal
+                    ? LayoutInformation.GetLayoutSlot(BeforeElement).Height
+                    : LayoutInformation.GetLayoutSlot(BeforeElement).Width,
+                AfterElementSize = Orientation == Orientation.Horizontal
+                    ? LayoutInformation.GetLayoutSlot(AfterElement).Height
+                    : LayoutInformation.GetLayoutSlot(AfterElement).Width,
 
-                        BeforeElementSize = Orientation == Orientation.Horizontal
-                            ? LayoutInformation.GetLayoutSlot(BeforeElement).Height
-                            : LayoutInformation.GetLayoutSlot(BeforeElement).Width,
-                        AfterElementSize = Orientation == Orientation.Horizontal
-                            ? LayoutInformation.GetLayoutSlot(AfterElement).Height
-                            : LayoutInformation.GetLayoutSlot(AfterElement).Width,
+                MinOffset = resizeData.BeforeElementSize - 22.0,
+                MaxOffset = resizeData.AfterElementSize - 22.0,
+                PreviewAdorner = new SplitPreviewAdorner(this)
+            };
 
-                        MinOffset = resizeData.BeforeElementSize - 22.0,
-                        MaxOffset = resizeData.AfterElementSize - 22.0,
-                        PreviewAdorner = new SplitPreviewAdorner(this, null)
-                    };
-
-                    adornerLayer.Add(this.resizeData.PreviewAdorner);
-                }
-            }
+            adornerLayer.Add(this.resizeData.PreviewAdorner);
         }
 
         private static void OnDragStarted(object sender, DragStartedEventArgs e)
         {
-            (sender as SplitContainerSplitter)?.OnDragStarted(e);
+            (sender as SplitContainerSplitter)?.OnDragStarted();
         }
 
         private void OnDragDelta(DragDeltaEventArgs e)

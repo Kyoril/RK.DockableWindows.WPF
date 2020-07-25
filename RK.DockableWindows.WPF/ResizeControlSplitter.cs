@@ -15,7 +15,7 @@ namespace RK.DockableWindows.WPF
     public class ResizeControlSplitter : Thumb
     {
         /// <summary>
-        /// Stores data of a drag&drop session.
+        /// Stores data of a drag & drop session.
         /// </summary>
         private sealed class ResizeData
         {
@@ -146,7 +146,7 @@ namespace RK.DockableWindows.WPF
             (sender as ResizeControlSplitter)?.OnDragDelta(e);
         }
 
-        private void OnDragStarted(DragStartedEventArgs e)
+        private void OnDragStarted()
         {
             AdornerLayer adornerLayer = AdornerLayer.GetAdornerLayer(ResizeControl);
             if (adornerLayer != null)
@@ -180,14 +180,14 @@ namespace RK.DockableWindows.WPF
                         break;
                 }
 
-                resizeData.PreviewAdorner = new SplitPreviewAdorner(this, null);
+                resizeData.PreviewAdorner = new SplitPreviewAdorner(this);
                 adornerLayer.Add(resizeData.PreviewAdorner);
             }
         }
 
         private static void OnDragStarted(object sender, DragStartedEventArgs e)
         {
-            (sender as ResizeControlSplitter)?.OnDragStarted(e);
+            (sender as ResizeControlSplitter)?.OnDragStarted();
         }
 
         internal void UpdateCursor()

@@ -14,6 +14,5 @@
         WindowGroupTemplate,
 
         DockableWindowTabTemplate,
-        DockableWindowGroupTemplate,
     }
 }

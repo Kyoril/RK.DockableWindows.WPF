@@ -12,7 +12,7 @@
     <!-- Default style of the DockCanvas control -->
     <Style x:Key="{x:Type wpf:DockCanvas}" TargetType="{x:Type wpf:DockCanvas}">
         <Setter Property="Background" Value="{DynamicResource {ComponentResourceKey ResourceId={x:Static wpf:ControlElements.DockCanvasBackgroundBrush},TypeInTargetAssembly={x:Type wpf:ControlElements}}}" />
-        <Setter Property="FrameworkElement.FocusVisualStyle" Value="{x:Null}" />
+        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
         
         <Style.Resources>
             <ResourceDictionary>
